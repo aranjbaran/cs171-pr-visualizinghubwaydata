@@ -63,9 +63,6 @@ UserVis.prototype.initVis = function() {
       var filter = function() {
             return true;
         }
-        // if (_filter != null) {
-        //     filter = _filter;
-        // }
 
 
 
@@ -81,7 +78,7 @@ UserVis.prototype.initVis = function() {
         .append("g")
         .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
-    // //TODO: create axis and scales
+ 
     this.x = d3.scale.ordinal()
         .rangeBands([0, this.width], .6)
         .domain(d3.range(0, 6))
@@ -105,7 +102,6 @@ UserVis.prototype.initVis = function() {
 
     this.svg.append("g")
         .attr("class", "xAxis axis")
-        // .attr("width", this.width)
         .attr("transform", "translate(0," + this.height + ")")
         .call(this.xAxis)
         .selectAll("text")
@@ -166,10 +162,6 @@ UserVis.prototype.updateVis = function() {
         .call(that.yAxis)
 
 
-    
-
-
-    // console.log(this.displayData)
     var hover = this.svg.selectAll(".bars")
         .data(this.displayData, function(d) {
 
@@ -188,7 +180,6 @@ UserVis.prototype.updateVis = function() {
             return classes[i]
         })
         .attr("transform", function(d, i) {
-            // console.log(Math.floor(i / 2));
             return "translate(" + ((that.contentWidth/12) * (i) + (Math.floor(i / 2) * (that.width - that.contentWidth)/5)) + ", 0)";
         })
         .style("fill", function(d, i) {
@@ -204,7 +195,7 @@ UserVis.prototype.updateVis = function() {
             return "bars hover " + classes[i] + ""
         })
     .on("mouseover", function(d) {
-        // console.log(this.id)
+       
         d3.selectAll(".hover")
             .style("opacity", function(k) {
                 return .1;
@@ -225,7 +216,7 @@ UserVis.prototype.updateVis = function() {
 
     hover.selectAll("rect")
         .attr("y", function(d) {
-            // console.log(d)
+           
             return that.y(d)
         })
 
@@ -268,9 +259,8 @@ UserVis.prototype.updateVis = function() {
         .attr("id", function(d, i) {
             return classes[i];
         })
-        // .attr("class", "hover")
         .on("mouseover", function(d) {
-            // console.log(this.id)
+           
             d3.selectAll(".hover")
                 .style("opacity", function(k) {
                     return .1;
@@ -291,6 +281,9 @@ UserVis.prototype.updateVis = function() {
         .attr('y', legendRectSize - legendSpacing)
         .text(function(d, i) {
             return bar_labels[i];
+        })
+        .attr("class", function(d, i) {
+            return "hover " + classes[i] + ""
         })
 
    legend.append('rect')
@@ -340,17 +333,13 @@ UserVis.prototype.onSelectionChange = function(selection) {
 
 this.wrangleData(f, station_filter)
     this.updateVis();
-// }
 
-
-   
 
 }
 
 UserVis.prototype.onStationChanged = function(selection, d) {
  var that = this;
 
-    console.log("HELLLO")
 
                  var filt = function(d) {
                     if (that.timeStart == null || that.timeEnd == null)
@@ -398,9 +387,6 @@ UserVis.prototype.onCheckboxChanged = function(_filterFunction) {
 var that = this
  that.displaydata = []
    
-             // console.log("final res", res)
-             // console.log(this.displayData)
-             // return res;
                 var filt = function(d) {
                     if (that.timeStart == null || that.timeEnd == null)
                     {
@@ -418,12 +404,9 @@ var that = this
 
         return d == selected_station
     }
-            
-             console.log("original", that.displayData)
              this.wrangleData(filt, station_filter)
 
-              console.log("new", that.displayData)
-            // wrangleData()
+           
             this.updateVis();
 
         }
@@ -431,9 +414,6 @@ var that = this
 
 UserVis.prototype.filterAndAggregate = function(_filter, _stationfilter) {
 
-
-    // Set filter to a function that accepts all items
-    // ONLY if the parameter _filter is NOT null use this parameter
    var that = this;
         
         var filter = function() {
@@ -455,15 +435,9 @@ UserVis.prototype.filterAndAggregate = function(_filter, _stationfilter) {
 
 
 
-// console.log(this.data)
-// console.log(this.displayData)
-    // return res;
-   
-
-// console.log(gender_final)
 
 if (d3.select("#weekday").property("checked") == true) {
-        // console.log("in weekday")
+        
         var male16_35 = 0;
         var male26_35 = 0;
         var male36_45 = 0;
@@ -478,29 +452,21 @@ if (d3.select("#weekday").property("checked") == true) {
         var female56_65 = 0;
         var female66_75 = 0;
 
-        // console.log(this.station_filter)
         
                 for (j = 0; j < intervals_keys.length; j++) {
                     
-                    // count = 0;
                     this.data.forEach(function(d) {
-// console.log(d)
+
                     for (i = 0; i < stations.length; i++) {
                              if (d.time == intervals_keys[j])
                                 {
                                     if (filter(d.time))
                                     {
                                         
-                                        // console.log("intime")
-                                            // console.log(d.stationdata)
-                                    // console.log(d.stationdata)
                                     d.stationdata.forEach(function (k) {
                                         if (station_filter(k.station))
                                         {
-                                            // console.log("HEREHRE")
-                                            // console.log(selected_station)
-                                            // console.log("A;SLDFJK")
-                                        // console.log(k.weekday.arrivals)
+                                            
                                        male16_35 += k["16-25"].weekday.male
                                     female16_35 += k["16-25"].weekday.female
                                       male26_35 += k["26-35"].weekday.male
@@ -530,7 +496,7 @@ if (d3.select("#weekday").property("checked") == true) {
             }
 
           if (d3.select("#weekend").property("checked") == true) {
-       // console.log("in weekday")
+       
         var male16_35 = 0;
         var male26_35 = 0;
         var male36_45 = 0;
@@ -549,7 +515,6 @@ if (d3.select("#weekday").property("checked") == true) {
         
                 for (j = 0; j < intervals_keys.length; j++) {
                     
-                    // count = 0;
                     this.data.forEach(function(d) {
 
                     for (i = 0; i < stations.length; i++) {
@@ -557,11 +522,9 @@ if (d3.select("#weekday").property("checked") == true) {
                                 {
                                     if (filter(d.time))
                                     {
-                                    // console.log(d.stationdata)
                                     d.stationdata.forEach(function (k) {
                                          if (station_filter(k.station))
                                         {
-                                        // console.log(k.weekday.arrivals)
                                        male16_35 += k["16-25"].weekend.male
                                     female16_35 += k["16-25"].weekend.female
                                       male26_35 += k["26-35"].weekend.male
@@ -583,9 +546,6 @@ if (d3.select("#weekday").property("checked") == true) {
                         
                     }
                 })
-                // user_final[0] = registered/(registered+casual)
-                // user_final[1] = casual/ (registered+casual); 
-                 // console.log(user_final);
 
                 }
             }
@@ -619,12 +579,9 @@ if (d3.select("#weekday").property("checked") == true) {
                                 {
                                     if (filter(d.time))
                                     {
-                                    // console.log(d.stationdata)
                                     d.stationdata.forEach(function (k) {
                                          if (station_filter(k.station))
                                         {
-                                            // console.log("enter")
-                                        // console.log(k.weekday.arrivals)
                                        male16_35 += k["16-25"].weekend.male
                                        male16_35 += k["16-25"].weekday.male
                                     female16_35 += k["16-25"].weekend.female

@@ -365,7 +365,7 @@ if (d3.select("#weekday").property("checked") == true) {
                                     {
 
                                     d.stationdata.forEach(function (k) {
-                                           // console.log("hii")
+                                         
                                         if (stationfilter(k.station))
                                         {
 
@@ -384,15 +384,15 @@ if (d3.select("#weekday").property("checked") == true) {
 
                 user_final[0] = registered/(registered+casual)
                 user_final[1] = casual/ (registered+casual); 
-                 // console.log(user_final);
+              
+
 
                 }
 
             }
 
           if (d3.select("#weekend").property("checked") == true) {
-       //      console.log("in weekend")
-       // console.log("in weekday")
+       
         var registered = 0;
         var casual = 0;
          var res = []
@@ -447,9 +447,8 @@ if (d3.select("#weekday").property("checked") == true) {
                                     if (filter(d.time))
                                     {
 
-                                    // console.log(d.stationdata)
                                     d.stationdata.forEach(function (k) {
-                                        // (stationfilter(k.station))
+                                        
                                          if (stationfilter(k.station))
                                          {
 
@@ -469,7 +468,7 @@ if (d3.select("#weekday").property("checked") == true) {
                 })
               user_final[0] = registered/(registered+casual)
                 user_final[1] = casual/ (registered+casual); 
-                 // console.log(user_final);
+               
 
                 }
 

@@ -20,23 +20,20 @@ var empty = true;
 var margin = 75
 
 CountVis = function(_parentElement, _data, _eventHandler) {
-    // console.log("a;sldfjk")
+    
     this.parentElement = _parentElement;
-    // console.log(_data)
+   
     this.data = _data;
-    // console.log(this.data)
-    // this.metaData = _metaData;
     this.eventHandler = _eventHandler;
     this.displayData = [];
 
-    // console.log("here")
     this.margin = {
             top: 100,
             right: 10,
             bottom: 100,
             left: 100
         },
-        this.width = 1000 - this.margin.left - this.margin.right,
+        this.width = 1200 - this.margin.left - this.margin.right,
 
         this.height = 400;
 
@@ -78,12 +75,9 @@ CountVis.prototype.initVis = function() {
         .scale(this.y)
         .orient("left");
 
-// console.log("hi")
     this.area = d3.svg.area()
         .interpolate("monotone")
-        // .attr("fill", "blue")
         .x(function(d) {
-            // console.log(that.x(d.time))
             return that.x(d.time) 
             + margin;
         })
@@ -101,8 +95,7 @@ CountVis.prototype.initVis = function() {
             var extent = that.brush.extent();
             var min = extent[0];
             var max = extent[1];
-            console.log(min)
-            // console.log(max)
+            
 
             if (empty) {
                 min = that.min
@@ -177,10 +170,7 @@ CountVis.prototype.initVis = function() {
  */
 CountVis.prototype.wrangleData = function() {
 
-    // displayData should hold the data which is visualized
-    // pretty simple in this case -- no modifications needed
     this.displayData = this.data;
-    // console.log(this.displayData)
 
 }
 
@@ -190,9 +180,8 @@ CountVis.prototype.wrangleData = function() {
  */
 CountVis.prototype.updateVis = function() {
     var that = this;
-    this.x.domain([0,23.99])
+    this.x.domain([0.1,23.9])
 
-    // console.log(this.displayData)
     this.y.domain(d3.extent(this.displayData, function(d) {
         return d.count/31;
     }));
@@ -235,7 +224,7 @@ CountVis.prototype.updateVis = function() {
             .attr("height", this.height);
 
     // TODO: implement update graphs (D3: update, enter, exit)
-
+   // this.addSlider(this.svg)
 
 
 }
@@ -249,23 +238,10 @@ CountVis.prototype.updateVis = function() {
 CountVis.prototype.onSelectionChange = function(day) {
 
 
-
-    // TODO: call wrangle function
-    // console.log(min)
-    //  console.log(max)
-    // console.log('HEREEE')
-    // this.wrangleData(function(d) {
-    //     return d.type == type;
-    // });
-
-    // this.updateVis();
-
-
 }
 
 CountVis.prototype.wrangleData = function(_filterFunction) {
 
-    // displayData should hold the data which is visualized
     this.displayData = this.filterAndAggregate(_filterFunction);
 
 }
@@ -285,59 +261,28 @@ CountVis.prototype.onCheckboxChanged = function(_filterFunction) {
 
         return d == selected_station
     }
-            
-             // console.log("original", that.displayData)
              this.wrangleData(station_filter)
 
-              // console.log("new", that.displayData)
-            // wrangleData()
             this.updateVis();
-
-
-
-
-            //  this.displaydata = []
-          
-            //  this.wrangleData()
-
-            // this.updateVis();
 
         }
             
 
 CountVis.prototype.onStationChanged = function(d) {
-// console.log(this.data)
-   
-             // console.log("final res", res)
+
                
              var station_filter = function(d) {
 
         return d == selected_station
     }
-             // console.log(this.displayData)
-             // return res;
              this.displaydata = []
-             // console.log(this.data)
              this.wrangleData(station_filter)
 
             // wrangleData()
             this.updateVis();
 
         }
-            
-    // displayData should hold the data which is visualized
-    // console.log("as;dlfkjads;ljk")
-    // this.displayData = this.filterAndAggregate(_filterFunction);
-
-    // check which textbox (analagous to finding the range)
-
-    // filter data based on what it was (applying filter functio based on range)
-    // store the this.displayData
-
-    // updatevis (render the result of this.displaydata)
-
-
-
+      
 
 /*
  *
@@ -358,7 +303,6 @@ CountVis.prototype.addSlider = function(svg) {
    
     var that = this;
 
-    // TODO: Think of what is domain and what is range for the y axis slider !!
     var sliderScale = d3.scale.linear().domain([1, .1]).range([190, 0])
 
     var sliderDragged = function() {
@@ -367,8 +311,6 @@ CountVis.prototype.addSlider = function(svg) {
      
 
         var sliderValue = sliderScale.invert(value);
-
-        // TODO: do something here to deform the y scale
   
 
         that.y.exponent(sliderValue)
@@ -387,28 +329,7 @@ CountVis.prototype.addSlider = function(svg) {
         "transform": "translate(" + 0 + "," + 0 + ")"
     })
 
-    // sliderGroup.append("rect").attr({
-    //     class: "sliderBg",
-    //     x: 5,
-    //     width: 10,
-    //     height: 190
-    // }).style({
-    //     fill: "lightgray"
-    // })
-
-
-    // sliderGroup.append("rect").attr({
-    //     "class": "sliderHandle",
-    //     y: 190,
-    //     width: 20,
-    //     height: 10,
-    //     rx: 2,
-    //     ry: 2
-    // }).style({
-    //     fill: "#333333"
-    // }).call(sliderDragBehaviour)
-
-
+    
 }
 
 CountVis.prototype.filterAndAggregate = function(_filter) {
@@ -425,7 +346,7 @@ CountVis.prototype.filterAndAggregate = function(_filter) {
 
 
   if (d3.select("#weekday").property("checked") == true) {
-        // console.log("in weekday")
+        
         var count;
          var res = []
         
@@ -436,18 +357,15 @@ CountVis.prototype.filterAndAggregate = function(_filter) {
                     for (i = 0; i < stations.length; i++) {
                              if (d.time == intervals_keys[j])
                                 {
-                                    // console.log(d.stationdata)
                                   
                                         d.stationdata.forEach(function (k) {
                                           if (filter(k.station))
                                          {      
-                                            // console.log(k.weekday.arrivals)
                                            count += k.weekday.arrivals
                                        }
 
                                         })
                                     
-                                    // console.log(count)
                                 }
                         
                     }
@@ -456,9 +374,9 @@ CountVis.prototype.filterAndAggregate = function(_filter) {
 
                       
                      var data = {"time": intervals_keys[j], "count": count}
-                     // console.log(data)
+                     
                              res.push(data)
-                     //  console.log(res)  
+                    
                  
 
                 }
@@ -466,7 +384,7 @@ CountVis.prototype.filterAndAggregate = function(_filter) {
             }
 
           if (d3.select("#weekend").property("checked") == true) {
-            // console.log("in weekend")
+           
         var count;
          var res = []
         
@@ -477,16 +395,13 @@ CountVis.prototype.filterAndAggregate = function(_filter) {
                     for (i = 0; i < stations.length; i++) {
                              if (d.time == intervals_keys[j])
                                 {
-                                    // console.log(d.stationdata)
                                     d.stationdata.forEach(function (k) {
                                         if (filter(k.station))
                                          {  
-                                        // console.log(k.weekday.arrivals)
                                        count += k.weekend.arrivals
                                    }
 
                                     })
-                                    // console.log(count)
                                 }
                         
                     }
@@ -495,9 +410,8 @@ CountVis.prototype.filterAndAggregate = function(_filter) {
 
                       
                      var data = {"time": intervals_keys[j], "count": count}
-                     // console.log(data)
-                             res.push(data)
-                     //  console.log(res)  
+                    
+                             res.push(data) 
                  
 
                 }
@@ -506,7 +420,6 @@ CountVis.prototype.filterAndAggregate = function(_filter) {
               if ((d3.select("#weekend").property("checked") == true && d3.select("#weekday").property("checked") == true) || 
                 (d3.select("#weekend").property("checked") == false && d3.select("#weekday").property("checked") == false)){
         var count;
-        // console.log("in both")
          var res = []
         
                 for (j = 0; j < intervals_keys.length; j++) {
@@ -531,9 +444,8 @@ CountVis.prototype.filterAndAggregate = function(_filter) {
                 })
 
                      var data = {"time": intervals_keys[j], "count": count}
-                     // console.log(data)
-                             res.push(data)
-                     //  console.log(res)  
+                    
+                             res.push(data) 
                  
 
                 }

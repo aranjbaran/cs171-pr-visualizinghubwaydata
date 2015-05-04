@@ -62,26 +62,18 @@
         </form>
     </div>
 </div>
+
+<div>
+
+
+
+
     <form>
 <div class="col-md-8">
                 <b>Current Brush:</b> <span id="brushInfo" class="small"></span>
             </div>
         </form>
         <br>
- <div id="scaleby">
-            Scale Station Markers By:
-           <label >
-                <input type="radio" id="totaldepartures" name="scale" value="departures" checked > Departures</label>
-            <label>
-                <input type="radio" id="capacity" name="scale" value="capacity" > Capacity </label>
-        </div>
-      <!--   <form >
-            Scale Station Labels By:
-            <label > 
-                <input type="radio" id="departures" name="scale" value="departures" id > Departures </label>
-            <label>
-                <input type="radio" id="arrivals" name="scale" value="arrivals" > Arrivals</label>
-        </form> -->
 
     <form>
         <div id="stationdropdown">
@@ -90,13 +82,24 @@
             </select>
         </div>
     </form>
-
+  
 <div class="col-md-8">
-                <b>Total Capacity of Selected Station:</b> <span id="departures" class="small"></span>
+                <b>Max Capacity of Selected Station:</b> <span id="departures" class="small"></span>
             </div>
+
+  
 
     <div id="whole">
         <div id = "maplegend">
+            <form>
+        <div id="scaleby">
+            Scale Station Markers By:
+           <label >
+                <input type="radio" id="totaldepartures" name="scale" value="departures" checked > Departures</label>
+            <label>
+                <input type="radio" id="capacity" name="scale" value="capacity" > Capacity </label>
+        </div>
+    </form>
            
 
         </div>
@@ -231,27 +234,22 @@
                         user_vis.onCheckboxChanged(d)
                     })
 
-                     d3.select("#totaldepartures").on("change", function(d) {
-                      
-                        map_vis.onRadioChanged(d)
-                        
-                    })
-
-                     d3.select("#capacity").on("change", function(d) {
-                      
-                        map_vis.onRadioChanged(d)
-                        
-                    })
-
 
                     d3.select("#dropdown").on("change", function(d) {
                         count_vis.onStationChanged(d)
                         pie_vis.onStationChanged(d)
-                         map_vis.moveMap(d);
+                         // map_vis.moveMap(d);
                          map_vis.totaldepartures(d);
                         user_vis.onStationChanged(d)
                     })
 
+                    d3.select("#totaldepartures").on("change", function(d) {
+                          map_vis.onRadioChanged(d)
+                    })
+
+                    d3.select("#capacity").on("change", function(d) {
+                        map_vis.onRadioChanged(d)
+                    })
 
 
 

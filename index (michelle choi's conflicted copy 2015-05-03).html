@@ -56,7 +56,7 @@
     <div id="day" >
         <form >
             <label >
-                <input type="checkbox" id="weekday" name="day" value="day" id > Weekday</label>
+                <input type="checkbox" id="weekday" name="day" value="day" > Weekday</label>
             <label>
                 <input type="checkbox" id="weekend" name="day" value="weekend" > Weekend</label>
         </form>
@@ -64,24 +64,10 @@
 </div>
     <form>
 <div class="col-md-8">
-                <b>Current Brush:</b> <span id="brushInfo" class="small"></span>
+                <b>current brush:</b> <span id="brushInfo" class="small"></span>
             </div>
         </form>
         <br>
- <div id="scaleby">
-            Scale Station Markers By:
-           <label >
-                <input type="radio" id="totaldepartures" name="scale" value="departures" checked > Departures</label>
-            <label>
-                <input type="radio" id="capacity" name="scale" value="capacity" > Capacity </label>
-        </div>
-      <!--   <form >
-            Scale Station Labels By:
-            <label > 
-                <input type="radio" id="departures" name="scale" value="departures" id > Departures </label>
-            <label>
-                <input type="radio" id="arrivals" name="scale" value="arrivals" > Arrivals</label>
-        </form> -->
 
     <form>
         <div id="stationdropdown">
@@ -90,10 +76,7 @@
             </select>
         </div>
     </form>
-
-<div class="col-md-8">
-                <b>Total Capacity of Selected Station:</b> <span id="departures" class="small"></span>
-            </div>
+</div>
 
     <div id="whole">
         <div id = "maplegend">
@@ -107,7 +90,7 @@
 
         </div>
 
-        <div id = "borderleg"> </div>
+
     </div>
 
 
@@ -208,14 +191,8 @@
                     })
 
                     $(MyEventHandler).bind("selectionChanged", function(event, range){
-                    d3.select("#brushInfo").text(convert_number(range['min_time'])+ " -> "+convert_number(range['max_time']));
+                    d3.select("#brushInfo").text(range['min_time']+ " -> "+range['max_time']);
                 });
-
-
-// $(MyEventHandler).bind("selectionChanged", function(event, range){
-//                     d3.select("#departures").text(convert_number(range['min_time'])+ " -> "+convert_number(range['max_time']));
-//                 });
-
 
                     d3.select("#weekday").on("change", function(d) {
                         count_vis.onCheckboxChanged(d)
@@ -231,24 +208,11 @@
                         user_vis.onCheckboxChanged(d)
                     })
 
-                     d3.select("#totaldepartures").on("change", function(d) {
-                      
-                        map_vis.onRadioChanged(d)
-                        
-                    })
-
-                     d3.select("#capacity").on("change", function(d) {
-                      
-                        map_vis.onRadioChanged(d)
-                        
-                    })
-
 
                     d3.select("#dropdown").on("change", function(d) {
                         count_vis.onStationChanged(d)
                         pie_vis.onStationChanged(d)
                          map_vis.moveMap(d);
-                         map_vis.totaldepartures(d);
                         user_vis.onStationChanged(d)
                     })
 
@@ -344,27 +308,40 @@
 
             }
 
-            var convert_number = function(d) {
+            
+            var convert_time = function(d) {
+                var times = [{ "0": "12 AM", "1": "1"
+
+
+
+                }]
+                var value = d3.range(5).map(function() {
+                    return 0;
+                });
+
+                var i;
+
+
+                for (i = 0; i <= 4; i++) {
+
+                    value[i] = d[i]
+
+                }
+
+                var minutes = Number(+value[3] + "" + value[4])
               
+                if (minutes != "00") {
+                    minutes = minutes / 60
+                    var x = 0
+                    var formatted = +minutes + "0";
+                    // minutes.toFixed(3)
+                } else(formatted = "0.00")
                
 
-                 var times = ["12 AM"  ,   "1 AM"  ,   "2 AM"  , "3 AM" ,
-               "4 AM"  ,  "5 AM"  , "6 AM"  , "7 AM"  ,  "8 AM"  ,   "9 AM"  ,   "10 AM"  ,  "11 AM" ,  "12 PM"  ,     "1 PM"  ,   "2 PM"  ,  "3 PM"  ,   "4 PM" ,"5 PM"  , "6 PM"  ,    "7 PM"  ,  "8 PM"  ,  "9 PM"  ,   "10 PM"  ,   "11 PM"  ,   "12 AM"]
+                var time = +value[0] + "" + value[1] + "" + formatted[1] + "" + formatted[2] + "" + formatted[3]
 
-                
-
-
-              //
-                // console.log(Math.round(d))
-                // var hour = String(Math.round(d))
-                console.log(hour)
-                var hour = Math.round(d)
-                
-                console.log(times[hour])
-                return (times[hour])
-          
+                return time;
             }
-
 
             var convert_time = function(d) {
                 var value = d3.range(5).map(function() {
@@ -460,7 +437,6 @@
                 pie_vis.onStationChanged(d)
                 map_vis.moveMap(d)
                 user_vis.onStationChanged(d)
-                map_vis.capacity(d)
             }
         </script>
 </body>
