@@ -25,15 +25,8 @@
 UserVis = function(_parentElement, _data, _eventHandler) {
 
   
-    // console.log(_data)
-   
-
-//this.station_filter
-//this.
     this.parentElement = _parentElement;
     this.data = _data;
-    // console.log(this.data)
-    // this.metaData = _metaData;
     this.eventHandler = _eventHandler;
 
     this.displayData = [];
@@ -50,9 +43,7 @@ UserVis = function(_parentElement, _data, _eventHandler) {
     this.contentWidth = 450
 
     this.height = 400 - this.margin.top - this.margin.bottom;
-    // this.wrangleData(null)
-
-    // console.log(this.displayData)
+    
 
     this.initVis();
 }
@@ -165,14 +156,18 @@ UserVis.prototype.updateVis = function() {
 
     var that = this;
 
+     this.y.domain(d3.extent(this.displayData, function(d) {
+        return d;
+    }))
+
+
+    this.x.domain([0, this.displayData.length])
     this.svg.select(".yAxis")
         .call(that.yAxis)
 
-    this.x.domain([0, this.displayData.length])
 
-    this.y.domain(d3.extent(this.displayData, function(d) {
-        return d;
-    }))
+    
+
 
     // console.log(this.displayData)
     var hover = this.svg.selectAll(".bars")
@@ -185,7 +180,7 @@ UserVis.prototype.updateVis = function() {
 
 
     hover_enter.append("rect")
-  
+    
 
 
     hover
@@ -225,7 +220,7 @@ UserVis.prototype.updateVis = function() {
 
     hover.exit().remove();
 
-    
+       
     
 
     hover.selectAll("rect")
@@ -240,6 +235,7 @@ UserVis.prototype.updateVis = function() {
         .attr("z-index", 100000)
 
 
+
    
   
     hover.selectAll("rect")
@@ -249,6 +245,7 @@ UserVis.prototype.updateVis = function() {
           })
 
 
+ 
 
     var bar_colors = ["HotPink", "LightSlateGray"]
     var bar_labels = ["Females", "Males"]
@@ -305,6 +302,8 @@ UserVis.prototype.updateVis = function() {
            .attr("class", function(d, i) {
             return "hover " + classes[i] + ""
         })
+
+
 
 }
 
@@ -664,7 +663,7 @@ if (d3.select("#weekday").property("checked") == true) {
 
             }
            
-            var  res = [female16_35, male16_35, female26_35, male26_35, female36_45, male36_45, female46_55, male46_55, female56_65, male56_65, female66_75, male66_75]
+            var  res = [female16_35/31, male16_35/31, female26_35/31, male26_35/31, female36_45/31, male36_45/31, female46_55/31, male46_55/31, female56_65/31, male56_65/31, female66_75/31, male66_75/31]
 
             this.displayData = res
           

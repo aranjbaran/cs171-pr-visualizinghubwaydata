@@ -36,7 +36,7 @@ CountVis = function(_parentElement, _data, _eventHandler) {
             bottom: 100,
             left: 100
         },
-        this.width = 800 - this.margin.left - this.margin.right,
+        this.width = 1000 - this.margin.left - this.margin.right,
 
         this.height = 400;
 
@@ -91,7 +91,7 @@ CountVis.prototype.initVis = function() {
         .y1(
             function(d) {
                 
-                return that.y(d.count);
+                return that.y(d.count/31);
             })
 
 
@@ -194,7 +194,7 @@ CountVis.prototype.updateVis = function() {
 
     // console.log(this.displayData)
     this.y.domain(d3.extent(this.displayData, function(d) {
-        return d.count;
+        return d.count/31;
     }));
 
     this.yAxis.scale(this.y)

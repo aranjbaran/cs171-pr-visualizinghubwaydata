@@ -36,11 +36,35 @@ MapVis = function(_whole, _parentElement, _data, _tripdata, _capacitydata, _even
             right: 20,
             bottom: 100,
             left: 100
-        },
+        }
 
+//           if ((!selection.min_time || !selection.max_time) && selection.min_time !== 0)
+//     {
+//         selection.min_time = 0;
+//         selection.max_time = 24;
+//     }
+//     console.log(selection.max_time)
+
+//     timeEnd = selection.max_time;
+//     timeStart = selection.min_time;
+
+//          var station_filter = function(d) {
+
+//         return d == selected_station
+//     }
+
+
+// var f = function(d) {
+
+//         return d >= timeStart && d <= timeEnd
+//     }
+// this.wrangleData(f, station_filter)
+
+ this.wrangleData(null)
+ console.log(this.displayData)
 
         this.initVis();
-        this.wrangleData(null)
+       
 }
 
 
@@ -101,7 +125,7 @@ MapVis.prototype.initVis = function() {
           that.displayData.forEach(function (k){
 
           d3.select("#station-"+k.station).attr("r", function(d){
-            return k.departures/100
+            return Math.sqrt(k.departures/5)
           })
 
 
@@ -136,6 +160,38 @@ MapVis.prototype.initVis = function() {
 
 
         })
+
+
+ that.displayData.forEach(function (k){
+
+          d3.select("#station-"+k.station).attr("class", function(d){
+            
+            if(k.percent_full <= .2){
+              
+                return "FFFFFF circle"
+            }
+            else if(k.percent_full > .2 && k.percent_full<=.4){
+                
+                return "FFB5B5 circle"
+            }
+            else if(k.percent_full > .4 && k.percent_full<=.6){
+                
+                return "FF5959 circle"
+            }
+            else if(k.percent_full > .6 && k.percent_full<=.8){
+              
+                return "CF3A3A circle"
+            }
+            else {
+
+                return "B80000 circle"
+            }
+            
+          })
+
+
+        })
+
 
             // Add a label.
             marker.append("svg:text")
@@ -224,8 +280,8 @@ MapVis.prototype.moveMap = function(d){
                 // .attr("r", 12)
                 .attr("cx", padding)
                 .attr("cy", padding)
-                .attr("onclick", "alert('click')")
-                .attr("onmouseover", "alert('mo')")
+                .attr("onclick", "this.givedepartures()")
+                // .attr("onmouseover", "alert('mo')")
                 .attr("stroke", "black")
                 .on("click", function(d) {
                     // console.log("hi")
@@ -234,12 +290,11 @@ MapVis.prototype.moveMap = function(d){
                     return "station-" +d.id;
                 })
 
-          that.displayData.forEach(function (k){
+        that.displayData.forEach(function (k){
 
-          d3.select("#station-"+k.station).attr("r", function(d){
-            return k.departures/100
+             d3.select("#station-"+k.station).attr("r", function(d){
+            return Math.sqrt(k.departures/5)
           })
-
 
         })
 
@@ -272,6 +327,36 @@ MapVis.prototype.moveMap = function(d){
 
         })
 
+ that.displayData.forEach(function (k){
+
+          d3.select("#station-"+k.station).attr("class", function(d){
+            
+            if(k.percent_full <= .2){
+              
+                return "FFFFFF circle"
+            }
+            else if(k.percent_full > .2 && k.percent_full<=.4){
+                
+                return "FFB5B5 circle"
+            }
+            else if(k.percent_full > .4 && k.percent_full<=.6){
+                
+                return "FF5959 circle"
+            }
+            else if(k.percent_full > .6 && k.percent_full<=.8){
+              
+                return "CF3A3A circle"
+            }
+            else {
+
+                return "B80000 circle"
+            }
+            
+          })
+
+
+        })
+
             // Add a label.
             marker.append("svg:text")
                 .attr("x", padding + 7)
@@ -297,20 +382,24 @@ MapVis.prototype.moveMap = function(d){
 
     // Bind our overlay to the map…
     overlay.setMap(map)
+
+
+
+    this.updateVis()
         // this.initVis();
     
 }
 
 MapVis.prototype.updateVis = function() {
 
+console.log('AHAHAHHA')
         var that = this;
 
         that.displayData.forEach(function (k){
 
-          d3.select("#station-"+k.station).attr("r", function(d){
-            return k.departures/100
+             d3.select("#station-"+k.station).attr("r", function(d){
+            return Math.sqrt(k.departures/5)
           })
-
 
         })
 
@@ -345,14 +434,96 @@ MapVis.prototype.updateVis = function() {
 
         })
 
+        //  that.displayData.forEach(function (k){
+        //     // .attr("id", function(d) {
+        //     //         return "station-" +d.id;
+
+        //   d3.select("#station-"+k.station).attr("id", function(d){
+            
+        //     if(k.percent_full <= .2){
+              
+        //         return "station-" +d.id+ "#FFFFFF" ;
+        //     }
+        //     else if(k.percent_full > .2 && k.percent_full<=.4){
+            
+        //         return "#FFB5B5 station-" +d.id;
+        //     }
+        //     else if(k.percent_full > .4 && k.percent_full<=.6){
+                
+        //         return "#FF5959 station-" +d.id;
+        //     }
+        //     else if(k.percent_full > .6 && k.percent_full<=.8){
+              
+        //         return "#CF3A3A station-" +d.id;
+        //     }
+        //     else {
+
+        //         return "#B80000 station-" +d.id;
+        //     }
+            
+        //   })
+
+
+        // })
+
+          that.displayData.forEach(function (k){
+
+          d3.select("#station-"+k.station).attr("class", function(d){
+            
+            if(k.percent_full <= .2){
+              
+                return "FFFFFF circle"
+            }
+            else if(k.percent_full > .2 && k.percent_full<=.4){
+                
+                return "FFB5B5 circle"
+            }
+            else if(k.percent_full > .4 && k.percent_full<=.6){
+                
+                return "FF5959 circle"
+            }
+            else if(k.percent_full > .6 && k.percent_full<=.8){
+              
+                return "CF3A3A circle"
+            }
+            else {
+
+                return "B80000 circle"
+            }
+            
+          })
+
+
+        })
+
+
+
 
     }
     /**
      * Method to wrangle the data. In this case it takes an options object
      */
 
+MapVis.prototype.givedepartures = function (d)
+{
+
+    that.displayData.forEach(function (k){
+            if (k.id = d.id)
+            {
+
+                  alert(  "There were" + k.departures + "departures during this time.");
+            }
+
+          // d3.select("#station-"+k.station).attr("r", function(d){
+          //   return Math.sqrt(k.departures/5)
+          // })
 
 
+    
+   
+})
+}
+//)
 MapVis.prototype.wrangleData = function(_filterFunction) {
 
     // var filt = function(d) {
@@ -381,41 +552,114 @@ MapVis.prototype.onStationChanged = function(_filterFunction) {
 
 MapVis.prototype.onCheckboxChanged = function(_filterFunction) {
     // console.log(this.data)
-    var that = this
+    // var that = this
+    // var selection;
 
-    this.wrangleData()
-    // console.log(that.displayData)
-    // wrangleData()
-    this.updateVis();
+    // if ((!selection.min_time || !selection.max_time) && selection.min_time !== 0)
+    // {
+    //     selection.min_time = 0;
+    //     selection.max_time = 24;
+    // }
+    // console.log(selection.max_time)
+
+    // timeEnd = selection.max_time;
+    // timeStart = selection.min_time;
+   
+
+   
+    // var f = function(d) {
+
+    //     return d >= timeStart && d <= timeEnd
+    // }
+
+    // this.wrangleData(f)
+    // // console.log(that.displayData)
+    // // wrangleData()
+    // this.updateVis();
+
+    var that = this
+ that.displaydata = []
+   
+             // console.log("final res", res)
+             // console.log(this.displayData)
+             // return res;
+                var filt = function(d) {
+                    if (that.timeStart == null || that.timeEnd == null)
+                    {
+                        that.timeStart = 0
+                        that.timeEnd = 24
+                    }
+        return d >= Math.round(that.timeStart) && d <= Math.round(that.timeEnd)
+    }
+
+     var station_filter = function(d) {
+        if (selected_station == 0)
+        {
+            return true;
+        }
+
+        return d == selected_station
+    }
+            
+             console.log("original", that.displayData)
+             this.wrangleData(filt, station_filter)
+
+              console.log("new", that.displayData)
+            // wrangleData()
+            this.updateVis();
+
 
 }
 
 
 MapVis.prototype.onSelectionChange = function(selection) {
 
-    if ((!selection.min_time || !selection.max_time) && selection.min_time !== 0)
+//     if ((!selection.min_time || !selection.max_time) && selection.min_time !== 0)
+//     {
+//         selection.min_time = 0;
+//         selection.max_time = 24;
+//     }
+//     console.log(selection.max_time)
+
+//     timeEnd = selection.max_time;
+//     timeStart = selection.min_time;
+   
+//   var station_filter = function(d) {
+
+//         return d == selected_station
+//     }
+
+
+// var f = function(d) {
+
+//         return d >= timeStart && d <= timeEnd
+//     }
+// this.wrangleData(f, station_filter)
+// this.updateVis();
+
+// ODO: call wrangle function
+    var that =this
+    if (!selection.min_time || !selection.max_time)
     {
         selection.min_time = 0;
         selection.max_time = 24;
     }
-    console.log(selection.max_time)
 
-    timeEnd = selection.max_time;
-    timeStart = selection.min_time;
+    that.timeEnd = selection.max_time;
+    that.timeStart = selection.min_time;
    
-  var station_filter = function(d) {
+    var f = function(d) {
+
+        return d >= Math.round(that.timeStart) && d <= Math.round(that.timeEnd)
+    }
+
+    var station_filter = function(d) {
 
         return d == selected_station
     }
 
-
-var f = function(d) {
-
-        return d >= timeStart && d <= timeEnd
-    }
 this.wrangleData(f, station_filter)
-this.updateVis();
-
+    this.updateVis();
 
 
 }
