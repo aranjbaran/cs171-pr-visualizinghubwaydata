@@ -192,8 +192,8 @@ html,
         }
 
           #mapimg{
-            /*width: 1000px;
-            height: 20px;*/
+            width: 800px;
+            height: 500px;
             position: relative;
             top: 0px;
             left: 300px;
@@ -225,10 +225,10 @@ html,
             /*font-size: 25px*/
         }
         #countimg{
-            /*width: 1000px;
-            height: 20px;*/
+           width: 800px;
+            height: 500px;
             position: relative;
-            top: 0px;
+            top: 30px;
             left: 400px;
             padding: 0;
             z-index: 60;
