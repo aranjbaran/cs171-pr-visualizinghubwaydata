@@ -83,6 +83,7 @@ CountVis.prototype.initVis = function() {
 
     this.area = d3.svg.area()
         .interpolate("monotone")
+
         .x(function(d) {
             return that.x(d.time) + margin;
         })
@@ -118,6 +119,7 @@ CountVis.prototype.initVis = function() {
     this.svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(" + margin + "," + this.height + ")")
+       
 
     this.svg.append("g")
         .attr("class", "y axis")
@@ -213,7 +215,8 @@ CountVis.prototype.updateVis = function() {
 
     path
         .transition()
-        .attr("d", this.area);
+        .attr("d", this.area)
+          .style("fill", "#505052")
 
     path.exit()
         .remove();

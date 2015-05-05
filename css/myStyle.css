@@ -2,7 +2,7 @@
     font-family: 'PT Sans', sans-serif;
 }*/
 .axis text {
-    font: 12px sans-serif;
+    font: 20px sans-serif;
 }
 
 .axis line,
@@ -47,7 +47,7 @@ html,
 
 
         #maplegend {
-            width: 800px;
+            width: 80px;
             height: 300px;
             position: absolute;
             top: 60px;
@@ -164,7 +164,7 @@ html,
             width: 1000px;
             height: 20px;
             position: absolute;
-            top: 130px;
+            top: 90px;
             left: 70px;
             padding: 0;
             z-index: 60;
@@ -173,8 +173,8 @@ html,
 
         #clickme{
             position: absolute;
-            top:800px;
-            left:2350px;
+            top:850px;
+            left:1000px;
             z-index: 100;
         }
 
@@ -186,6 +186,74 @@ html,
             position: relative;
             top: 1000px;
             left: 100px;
+            padding: 0;
+            z-index: 60;
+            font-size: 25px
+        }
+
+          #mapimg{
+            /*width: 1000px;
+            height: 20px;*/
+            position: relative;
+            top: 0px;
+            left: 300px;
+            padding: 0;
+            z-index: 60;
+            /*font-size: 25px*/
+        }
+
+
+        #userimg{
+            /*width: 1000px;
+            height: 20px;*/
+            position: relative;
+            top: 0px;
+            left: 300px;
+            padding: 0;
+            z-index: 60;
+            /*font-size: 25px*/
+        }
+
+        #ageimg{
+            /*width: 1000px;
+            height: 20px;*/
+            position: relative;
+            top: 0px;
+            left: 300px;
+            padding: 0;
+            z-index: 60;
+            /*font-size: 25px*/
+        }
+        #countimg{
+            /*width: 1000px;
+            height: 20px;*/
+            position: relative;
+            top: 0px;
+            left: 400px;
+            padding: 0;
+            z-index: 60;
+            /*font-size: 25px*/
+        }
+
+
+        #bike{
+            width: 100px;
+            height: 200px;
+            position: absolute;
+            top: 800px;
+            left: 350px;
+            padding: 0;
+            z-index: 60;
+            font-size: 25px
+        }
+
+
+        #bike1{
+            width: 100px;
+            height: 200px;
+            position: absolute;
+            top: 800px;
+            left: 1900px;
             padding: 0;
             z-index: 60;
             font-size: 25px

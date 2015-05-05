@@ -11,7 +11,7 @@ LegendVis = function(_parentElement) {
             left: 100
         },
   
-    this.width = 1500
+    this.width = 200
      
 
     this.height = 400 - this.margin.top - this.margin.bottom;
@@ -42,6 +42,7 @@ this.svg = this.parentElement.append("svg")
         .attr("height", this.height + this.margin.top + this.margin.bottom)
         .style("padding", "40px 0px 20px 5px")
         .append("g")
+        .attr("id", "legendhere")
 
 
 var maplegend = this.svg.selectAll('.maplegend')

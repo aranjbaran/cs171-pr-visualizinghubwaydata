@@ -591,14 +591,7 @@ MapVis.prototype.onCheckboxChanged = function(_filterFunction) {
              this.wrangleData(filt, station_filter)
 
 
- if (d3.select("#linearposition").property("checked") == true) {
 
-                    // d3.selectAll(".marker").data(that.displayData)
-                            
-                            map_vis.moveMap(null, 15, -71.059773, 42.358431)
-
-                                this.onLayoutChanged() 
-                        }
 
             this.updateVis();
 

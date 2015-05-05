@@ -45,12 +45,13 @@
 
 
 
- <div class="navbar navbar-default navbar-fixed-top">
+ <div class="nav">
       <ul>
          <li class="index"><a href="index.html">Home</a></li>
         <li class="home"><a href="bikemap1.html">Bike Share Project</a></li>
         <li class="names"><a href="story.html" id ="ilikepoop">Story Time</a></li>
         <li class ="git"><a href="https://github.com/aranjbaran/cs171-pr-visualizinghubwaydata">View on GitHub</a></li>
+        <li class ="git"><a href="https://github.com/aranjbaran/cs171-pr-visualizinghubwaydata/blob/master/Process%20Book.pdf">View Process Book</a></li>
       </ul>
     </div>
 
@@ -103,16 +104,16 @@ var newsvg = d3.select(".svg")
 d3.select(".newsvg").append("text")
         .text("Bike Map Visualization")
         .attr("class", "text")
-        .attr("font-size", 170)
-        .attr("transform", "translate(" + 180 + ", " + 275 + ")")
+        .attr("font-size", 140)
+        .attr("transform", "translate(" + 180 + ", " + 200 + ")")
         .style("fill", "grey")
 
     d3.select(".newsvg").append("text")
         .text("By Michelle Choi, Alina Ranjbaran and Sam Udolf")
         .attr("class", "text")
-        .attr("font-size", 90)
+        .attr("font-size", 80)
         // .attr
-        .attr("transform", "translate(" + 180 + ", " + 475 + ")")
+        .attr("transform", "translate(" + 180 + ", " + 300 + ")")
         .style("fill", "green")
   // .attr("x", function (d) {
   //   console.log(d3.selectAll(".svg"))
@@ -139,14 +140,24 @@ d3.select(".newsvg").append("text")
     //     .attr("height", "20");
 </script>
 
+ 
+<div id = "bike">
+
+ <image src = "/img/realbike.jpg" "width:10; height: 10">
+</div>
+
 <div id = "clickme">
- <button type="button"> <a href="bikemap1.html"> Launch Visualization</a></button>
+ <button type="button" class="btn btn-default btn-lg" style="height:100px;width:500px"> <a href="bikemap1.html"><h1><b> Launch Visualization</b></h1></a></button>
 
 
 </div>
 
 
+ 
+<div id = "bike1">
 
+ <image src = "/img/realbike.jpg" "width:10; height: 10">
+</div>
 
 <script>
         buttons_vis = new ButtonVis(d3.select("#hubim"));
