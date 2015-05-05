@@ -193,7 +193,9 @@ html,
 
           #mapimg{
             width: 800px;
-            height: 600px;
+
+            height: 500px;
+
             position: relative;
             top: 0px;
             left: 300px;
@@ -204,8 +206,8 @@ html,
 
 
         #userimg{
-            /*width: 1000px;
-            height: 20px;*/
+            width: 450px;
+            height: 400px;
             position: relative;
             top: 0px;
             left: 300px;
@@ -225,10 +227,12 @@ html,
             /*font-size: 25px*/
         }
         #countimg{
-            width: 800px;
-            height: 600px;
+
+           width: 800px;
+            height: 450px;
+
             position: relative;
-            top: 0px;
+            top: 20px;
             left: 400px;
             padding: 0;
             z-index: 60;
