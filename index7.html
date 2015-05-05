@@ -9,12 +9,12 @@
 <script src="js/mapvis.js"></script>
 <script src="js/uservis.js"></script>
 <script src="js/legendvis.js"></script>
-<script src="js/hopscotch.js"></script>
-<script src="js/my_first_tour.js"></script>
+<!-- <script src="js/hopscotch.js"></script>
+<script src="js/my_first_tour.js"></script> -->
 
 <!--Stylesheets-->
 <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/hopscotch.css"></link>
+ <!-- <link rel="stylesheet" href="css/hopscotch.css"></link> -->
 
 
 <!-- Get some nice font-->
@@ -44,11 +44,11 @@
 <body>
 
 
+
  <div class="nav">
       <ul>
-        <li class="home"><a href="bikemap1.html">Bike Share Project</a></li>
-        <li class="names"><a href="story.html" id ="ilikepoop">Story Time</a></li>
-        <li class ="git"><a href="https://github.com/aranjbaran/cs171-pr-visualizinghubwaydata">View on GitHub</a></li>
+        <li class="home"><a href="#">Bike Share Project</a></li>
+        <li class="names"><a href="#">CS 171</a></li>
       </ul>
     </div>
 
@@ -66,13 +66,10 @@
 
 
     <form>
-<!-- <div class="col-md-8"> -->
-    <div id = "curbrush">
+<div id = "currentbrush">
                 <b>Current Brush:</b> <span id="brushInfo" class="small"></span>
             </div>
-        </div>
         </form>
-
         <br>
  <div id="scaleby">
     <div id ="station">
@@ -82,24 +79,20 @@
             <label>
                 <input type="radio" id="capacity" name="scale" value="capacity" > Capacity </label>
         </div>
+    </div>
+    <br>
+    <div class="col-md-8">
+    <!-- <div id="capacitybar"> -->
+                <b>Total Capacity of Selected Station:</b> <span id="departures" class="small"></span>
+            <!-- </div> -->
         </div>
-        <br>
-
-        <div class="col-md-8" >
-        <div id="capacitybar">
-                <b>Total Capacity of Selected Station:</b> <span id="departures"></span>
-            </div>
-        </div>
-    
 
        <!--   <div id="position">
-         <div id = "pos">
             Position Markers:
            <label >
                 <input type="radio" id="mapposition" name="position" value="departures" > On Top of Map</label>
             <label>
                 <input type="radio" id="linearposition" name="position" value="capacity" > Linear Ranking </label>
-        </div>
         </div> -->
       <!--   <form >
             Scale Station Labels By:
@@ -111,21 +104,15 @@
 
     <form>
         <div id="stationdropdown">
-            <div id ="stationmenu">
             Choose a Station:
             <select id="dropdown" onchange="stationselect(this.value)">
             </select>
         </div>
-    </div>
     </form>
 
 
 
     <div id="whole">
-        <div id = "countvistitle">
-            Brush Over Time to See Arrivals by Hour:
-        </div>
-
         <div id = "maplegend">
            
 
@@ -146,15 +133,7 @@
 
     <div id="graphs">
 
-        <div id = "titles">
-                Casual vs. Registered Breakdown:                     
-            </div>
-        <div id = "demog">
-                Age and Gender Distribution:                  
-            </div>
-
         <div id="pieVis">
-            
 
         </div>
 
@@ -227,7 +206,7 @@
                     $(MyEventHandler).bind("selectionChanged", function(event, range) {
 
                         user_vis.onSelectionChange(range)
-                         
+                        
                             
                     })
 
@@ -263,17 +242,25 @@
 
                         map_vis.onCheckboxChanged(d)
                         user_vis.onCheckboxChanged(d)
-                         
+                        //  if (d3.select("#linearposition").property("checked") == true) {
+                        //          // map_vis.moveMap(d, 15, -71.059773, 42.358431);
+                        //         map_vis.onLayoutChanged(d) 
+                        // }
                     })
                     d3.select("#weekend").on("change", function(d) {
                         count_vis.onCheckboxChanged(d)
                         pie_vis.onCheckboxChanged(d)
+
                         map_vis.onCheckboxChanged(d)
                         user_vis.onCheckboxChanged(d)
-                         
+                        //  if (d3.select("#linearposition").property("checked") == true) {
+                        //          // map_vis.moveMap(d, 15, -71.059773, 42.358431);
+                        //         map_vis.onLayoutChanged(d) 
+                        // }
                     })
 
-                   
+                    
+                      
 
 
                     d3.select("#dropdown").on("change", function(d) {
@@ -283,21 +270,6 @@
                          map_vis.totaldepartures(d);
                         user_vis.onStationChanged(d)
                     })
-
-                    d3.select("#totaldepartures").on("change", function(d) {
-                      
-                    
-                    map_vis.onRadioChanged(d)
-                    })
-
-                     d3.select("#capacity").on("change", function(d) {
-                      
-                        
-                    
-                    map_vis.onRadioChanged(d)
-                        
-                    })
-
 
 
 
@@ -398,8 +370,16 @@
                  var times = ["12 AM"  ,   "1 AM"  ,   "2 AM"  , "3 AM" ,
                "4 AM"  ,  "5 AM"  , "6 AM"  , "7 AM"  ,  "8 AM"  ,   "9 AM"  ,   "10 AM"  ,  "11 AM" ,  "12 PM"  ,     "1 PM"  ,   "2 PM"  ,  "3 PM"  ,   "4 PM" ,"5 PM"  , "6 PM"  ,    "7 PM"  ,  "8 PM"  ,  "9 PM"  ,   "10 PM"  ,   "11 PM"  ,   "12 AM"]
 
+                
+
+
+              //
+                // console.log(Math.round(d))
+                // var hour = String(Math.round(d))
+                console.log(hour)
                 var hour = Math.round(d)
                 
+                console.log(times[hour])
                 return (times[hour])
           
             }
@@ -502,9 +482,13 @@
                 map_vis.capacity(d)
             }
 
+
+
+   
+
+
+
         </script>
-
-
 </body>
 
 </html>

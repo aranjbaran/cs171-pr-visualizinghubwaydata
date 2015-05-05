@@ -1,8 +1,8 @@
-/*body{
+body{
     font-family: 'PT Sans', sans-serif;
-}*/
+}
 .axis text {
-    font: 12px sans-serif;
+    font: 10px sans-serif;
 }
 
 .axis line,
@@ -35,8 +35,8 @@ html,
         }
         
         html body #whole {
-            width: 10px;
-            height: 10px;
+            width: 100%;
+            height: 100%;
             margin-left: 0;
             padding: 0;
             position: absolute;
@@ -73,10 +73,20 @@ html,
             width: 400px;
             height: 40px;
             position: absolute;
-            top: 110px;
-            left: 50px;
+            top: 100px;
+            left: 20px;
             padding: 0;
-            font-size: 25px;
+            font-size: 22px;
+        }
+
+         #curbrush {
+            width: 400px;
+            height: 40px;
+            position: absolute;
+            top: 100px;
+            left: 20px;
+            padding: 0;
+            font-size: 22px;
         }
 
 
@@ -84,127 +94,11 @@ html,
             width: 600px;
             height: 40px;
             position: absolute;
-            top: 160px;
+            top: 170px;
             left: 1220px;
             padding: 0;
             z-index: 60;
-            font-size: 25px;
-        }
-
-        #curbrush {
-            width: 400px;
-            height: 40px;
-            position: absolute;
-            top: 250px;
-            left: 100px;
-            padding: 0;
-            font-size: 20px;
-        }
-
-        #capacitybar {
-            width: 500px;
-            height: 40px;
-            position: absolute;
-            top: 35px;
-            left: 1220px;
-            padding: 0;
-            z-index: 60;
-            font-size: 25px;
-        }
-
-        #pos {
-            width: 600px;
-            height: 40px;
-            position: absolute;
-            top: 110px;
-            left: 70px;
-            padding: 0;
-            z-index: 60;
-            font-size: 25px;
-        }
-
-
-         #countvistitle{
-            width: 1000px;
-            height: 70px;
-            position: absolute;
-            top: 40px;
-            left: 90px;
-            padding: 0;
-        /*    z-index: 60;*/
             font-size: 22px;
-            text-decoration: underline;
-        }
-
-        #titles {
-            width: 1000px;
-            height: 70px;
-            position: absolute;
-            top: 420px;
-            left: 90px;
-            padding: 0;
-            z-index: 60;
-            font-size: 22px;
-            text-decoration: underline;
-        }
-
-         #demog {
-            width: 1000px;
-            height: 70px;
-            position: absolute;
-            top: 420px;
-            left: 560px;
-            padding: 0;
-            z-index: 60;
-            font-size: 22px;
-            text-decoration: underline;
-        }
-
-        #stationdropdown {
-            width: 1000px;
-            height: 20px;
-            position: absolute;
-            top: 130px;
-            left: 70px;
-            padding: 0;
-            z-index: 60;
-            font-size: 25px;
-        }
-
-        #clickme{
-            position: absolute;
-            top:800px;
-            left:2350px;
-            z-index: 100;
-        }
-
-
-
-        #button{
-            /*width: 1000px;
-            height: 20px;*/
-            position: relative;
-            top: 1000px;
-            left: 100px;
-            padding: 0;
-            z-index: 60;
-            font-size: 25px
-        }
-
-
-        #hubim{
-            z-index: 0;
-        }
-
-        #brushinfo {
-            width: 1000px;
-            height: 70px;
-            position: absolute;
-            top: 310px;
-            left: 70px;
-            padding: 0;
-            z-index: 60;
-            font-size: 25px;
         }
 
         #weekday{
@@ -213,18 +107,17 @@ html,
 
         #mapVis {
             width: 1200px;
-            height: 1100px;
+            height: 1200px;
             position: absolute;
             top: 20px;
-            left: 1210px;
+            left: 1200px;
             padding: 0;
             z-index: 50;
-            /*stroke: black;*/
         }
         
         html body #whole #svg {
-            width: 10px;
-            height: 10px;
+            width: 25%;
+            height: 75%;
             margin-right: 75%;
             padding: 0;
             color: "white"
@@ -238,10 +131,20 @@ html,
             left: 20px;
             padding: 0;
         }
+
+        #capacitybar{
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            padding: 0;
+            font-size: 22px;
+        }
         
         #graphs {
-            width: 100px;
-            height: 200px;
+            width: 800px;
+            height: 700px;
             position: absolute;
             top: 400px;
             left: 20px;
@@ -253,7 +156,7 @@ html,
             height: 400px;
             position: absolute;
             top: 500px;
-            left: 70px;
+            left: 20px;
             padding: 0;
         }
         
@@ -270,8 +173,8 @@ html,
             width: 300px;
             height: 300px;
             position: absolute;
-            top: 375px;
-            left: 450px;
+            top: 500px;
+            left: 400px;
             padding: 0;
         }
         
@@ -368,26 +271,3 @@ html,
     display: inline-block;
     margin-right: -4px;
   }
-
-  input[type=checkbox]
-{
-  /* Double-sized Checkboxes */
-  -ms-transform: scale(1.6); /* IE */
-  -moz-transform: scale(1.6); /* FF */
-  -webkit-transform: scale(1.6); /* Safari and Chrome */
-  -o-transform: scale(1.6); /* Opera */
-  /*padding: 30px;*/
-}
-
-input[type=radio]
-{
-  /* Double-sized Checkboxes */
-  -ms-transform: scale(1.6); /* IE */
-  -moz-transform: scale(1.6); /* FF */
-  -webkit-transform: scale(1.6); /* Safari and Chrome */
-  -o-transform: scale(1.6); /* Opera */
-  /*padding: 30px;*/
-}
-
-
-

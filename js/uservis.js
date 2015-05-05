@@ -19,7 +19,7 @@
  * @constructor
  */
 
- var agelabels = ["16-35", "26-35", "36-45", "46-55", "56-65", "66-75"]
+ var agelabels = ["16-25", "26-35", "36-45", "46-55", "56-65", "66-75"]
  var classes = ["female", "male", "female", "male", "female", "male", "female", "male", "female", "male", "female", "male"]
 
 UserVis = function(_parentElement, _data, _eventHandler) {
@@ -42,7 +42,7 @@ UserVis = function(_parentElement, _data, _eventHandler) {
     this.width = 500
     this.contentWidth = 450
 
-    this.height = 400 - this.margin.top - this.margin.bottom;
+    this.height = 480 - this.margin.top - this.margin.bottom;
     
 
     this.initVis();
@@ -71,13 +71,23 @@ UserVis.prototype.initVis = function() {
         }
 
         this.wrangleData(filter, stationfilter);
+        
     //TODO: construct or select SVG
     this.svg = this.parentElement.append("svg")
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+        .attr("class", "addborder")
 
+        .append("g")
+        .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
+        //  .attr("stroke", "black")
+        // .attr("stroke-width", 3)
+ 
+
+
+    // d3.selectAll("#uservis")
+        // .attr("stroke", "black")
+        // .attr("stroke-width", 3)
  
     this.x = d3.scale.ordinal()
         .rangeBands([0, this.width], .6)
@@ -111,6 +121,7 @@ UserVis.prototype.initVis = function() {
             return agelabels[i];
         })
         .style("font-size", "20px")
+
 
 
     this.y.domain([0, d3.max(this.displayData)]);
@@ -221,7 +232,7 @@ UserVis.prototype.updateVis = function() {
         })
 
         .attr("height", function(d) {
-            return that.height - that.y(d)
+            return that.height - that.y(d) 
         })
         .attr("z-index", 100000)
 
@@ -250,10 +261,10 @@ UserVis.prototype.updateVis = function() {
         .append('g')
         .attr('class', 'legend')
         .attr('transform', function(d, i) {
-            var height = legendRectSize + legendSpacing;
+            var height = legendRectSize + legendSpacing ;
             var offset = height;
-            var horz = that.width - legendRectSize;
-            var vert = i * height - offset;
+            var horz = 10+ legendRectSize;
+            var vert = i * height + offset - 10;
             return 'translate(' + horz + ',' + vert + ')';
         })
         .attr("id", function(d, i) {

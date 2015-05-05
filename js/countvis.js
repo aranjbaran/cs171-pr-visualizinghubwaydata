@@ -1,3 +1,4 @@
+
 /**
  * Created by Hendrik Strobelt (hendrik.strobelt.com) on 1/28/15.
  */
@@ -20,9 +21,9 @@ var empty = true;
 var margin = 75
 
 CountVis = function(_parentElement, _data, _eventHandler) {
-    
+
     this.parentElement = _parentElement;
-   
+
     this.data = _data;
     this.eventHandler = _eventHandler;
     this.displayData = [];
@@ -33,7 +34,7 @@ CountVis = function(_parentElement, _data, _eventHandler) {
             bottom: 100,
             left: 100
         },
-        this.width = 1200 - this.margin.left - this.margin.right,
+        this.width = 1100 - this.margin.left - this.margin.right,
 
         this.height = 400;
 
@@ -48,7 +49,7 @@ CountVis = function(_parentElement, _data, _eventHandler) {
  */
 CountVis.prototype.initVis = function() {
 
-    var that = this; 
+    var that = this;
 
     // TODO: modify this to append an svg element, not modify the current placeholder SVG element
     this.svg = this.parentElement.append("svg")
@@ -59,17 +60,22 @@ CountVis.prototype.initVis = function() {
 
     this.x = d3.scale.linear()
 
-        .range([0, this.width])
+    .range([0, this.width])
 
     this.xAxis = d3.svg.axis()
 
-        .scale(this.x)
+    .scale(this.x)
         .ticks(24)
 
 
     this.y = d3.scale.pow()
         .range([this.height, 0]);
-  
+
+    // this.xAxis.append("text")      // text label for the x axis
+    //     .attr("x", 265 )
+    //     .attr("y", 240 )
+    //     .style("text-anchor", "middle")
+    // .text("Time");
 
     this.yAxis = d3.svg.axis()
         .scale(this.y)
@@ -78,14 +84,13 @@ CountVis.prototype.initVis = function() {
     this.area = d3.svg.area()
         .interpolate("monotone")
         .x(function(d) {
-            return that.x(d.time) 
-            + margin;
+            return that.x(d.time) + margin;
         })
         .y0(this.height)
         .y1(
             function(d) {
-                
-                return that.y(d.count/31);
+
+                return that.y(d.count / 31);
             })
 
 
@@ -95,7 +100,7 @@ CountVis.prototype.initVis = function() {
             var extent = that.brush.extent();
             var min = extent[0];
             var max = extent[1];
-            
+
 
             if (empty) {
                 min = that.min
@@ -118,10 +123,10 @@ CountVis.prototype.initVis = function() {
         .attr("class", "y axis")
         .attr("transform", "translate(" + margin + ", 0)")
         .append("text")
-        .attr("transform", "rotate(-90)")    
+        .attr("transform", "rotate(-90)")
         .attr("y", 7)
-            .attr("dy", ".8em")
-            .style("text-anchor", "end")
+        .attr("dy", ".8em")
+        .style("text-anchor", "end")
 
 
     this.svg.append("g")
@@ -143,10 +148,10 @@ CountVis.prototype.initVis = function() {
 
 
     function focus() {
-            that.svg.select(".x.axis").call(that.xAxis)
-            that.svg.select("path.area").attr("d", that.area);
-        }
- 
+        that.svg.select(".x.axis").call(that.xAxis)
+        that.svg.select("path.area").attr("d", that.area);
+    }
+
 
 
     // TODO: modify this to append an svg element, not modify the current placeholder SVG element
@@ -180,10 +185,10 @@ CountVis.prototype.wrangleData = function() {
  */
 CountVis.prototype.updateVis = function() {
     var that = this;
-    this.x.domain([0.1,23.9])
+    this.x.domain([0.00001, 23.9])
 
     this.y.domain(d3.extent(this.displayData, function(d) {
-        return d.count/31;
+        return d.count / 31;
     }));
 
     this.yAxis.scale(this.y)
@@ -221,10 +226,10 @@ CountVis.prototype.updateVis = function() {
     this.svg.select(".brush")
         .call(this.brush)
         .selectAll("rect")
-            .attr("height", this.height);
+        .attr("height", this.height);
 
     // TODO: implement update graphs (D3: update, enter, exit)
-   // this.addSlider(this.svg)
+    // this.addSlider(this.svg)
 
 
 }
@@ -249,40 +254,39 @@ CountVis.prototype.wrangleData = function(_filterFunction) {
 CountVis.prototype.onCheckboxChanged = function(_filterFunction) {
 
     var that = this
- that.displaydata = []
-   
+    that.displaydata = []
 
 
-     var station_filter = function(d) {
-        if (selected_station == 0)
-        {
+
+    var station_filter = function(d) {
+        if (selected_station == 0) {
             return true;
         }
 
         return d == selected_station
     }
-             this.wrangleData(station_filter)
+    this.wrangleData(station_filter)
 
-            this.updateVis();
+    this.updateVis();
 
-        }
-            
+}
+
 
 CountVis.prototype.onStationChanged = function(d) {
 
-               
-             var station_filter = function(d) {
+
+    var station_filter = function(d) {
 
         return d == selected_station
     }
-             this.displaydata = []
-             this.wrangleData(station_filter)
+    this.displaydata = []
+    this.wrangleData(station_filter)
 
-            // wrangleData()
-            this.updateVis();
+    // wrangleData()
+    this.updateVis();
 
-        }
-      
+}
+
 
 /*
  *
@@ -300,18 +304,18 @@ CountVis.prototype.onStationChanged = function(d) {
  * @param svg -- the svg element
  */
 CountVis.prototype.addSlider = function(svg) {
-   
+
     var that = this;
 
     var sliderScale = d3.scale.linear().domain([1, .1]).range([190, 0])
 
     var sliderDragged = function() {
-        
+
         var value = Math.max(0, Math.min(190, d3.event.y));
-     
+
 
         var sliderValue = sliderScale.invert(value);
-  
+
 
         that.y.exponent(sliderValue)
         d3.select(this)
@@ -329,131 +333,130 @@ CountVis.prototype.addSlider = function(svg) {
         "transform": "translate(" + 0 + "," + 0 + ")"
     })
 
-    
+
 }
 
 CountVis.prototype.filterAndAggregate = function(_filter) {
 
-        var that = this;
-        
-        var filter = function() {
-            return true;
-        }
-        if (_filter != null
-         && selected_station != 0) {
-            filter = _filter;
-        }
+    var that = this;
 
-
-  if (d3.select("#weekday").property("checked") == true) {
-        
-        var count;
-         var res = []
-        
-                for (j = 0; j < intervals_keys.length; j++) {
-                    
-                    count = 0;
-                    this.data.forEach(function(d) {
-                    for (i = 0; i < stations.length; i++) {
-                             if (d.time == intervals_keys[j])
-                                {
-                                  
-                                        d.stationdata.forEach(function (k) {
-                                          if (filter(k.station))
-                                         {      
-                                           count += k.weekday.arrivals
-                                       }
-
-                                        })
-                                    
-                                }
-                        
-                    }
-                })
-
-
-                      
-                     var data = {"time": intervals_keys[j], "count": count}
-                     
-                             res.push(data)
-                    
-                 
-
-                }
-
-            }
-
-          if (d3.select("#weekend").property("checked") == true) {
-           
-        var count;
-         var res = []
-        
-                for (j = 0; j < intervals_keys.length; j++) {
-                    
-                    count = 0;
-                    this.data.forEach(function(d) {
-                    for (i = 0; i < stations.length; i++) {
-                             if (d.time == intervals_keys[j])
-                                {
-                                    d.stationdata.forEach(function (k) {
-                                        if (filter(k.station))
-                                         {  
-                                       count += k.weekend.arrivals
-                                   }
-
-                                    })
-                                }
-                        
-                    }
-                })
-
-
-                      
-                     var data = {"time": intervals_keys[j], "count": count}
-                    
-                             res.push(data) 
-                 
-
-                }
-
-            }
-              if ((d3.select("#weekend").property("checked") == true && d3.select("#weekday").property("checked") == true) || 
-                (d3.select("#weekend").property("checked") == false && d3.select("#weekday").property("checked") == false)){
-        var count;
-         var res = []
-        
-                for (j = 0; j < intervals_keys.length; j++) {
-                    
-                    count = 0;
-                    this.data.forEach(function(d) {
-                    for (i = 0; i < stations.length; i++) {
-                             if (d.time == intervals_keys[j])
-                                {
-
-                                    d.stationdata.forEach(function (k) {
-                                        if (filter(k.station))
-                                         {  
-                                       count += k.weekend.arrivals
-                                       count += k.weekday.arrivals
-                                   }
-
-                                    })
-                                }
-                        
-                    }
-                })
-
-                     var data = {"time": intervals_keys[j], "count": count}
-                    
-                             res.push(data) 
-                 
-
-                }
-
-            }
-            return res;
-
+    var filter = function() {
+        return true;
+    }
+    if (_filter != null && selected_station != 0) {
+        filter = _filter;
     }
 
 
+    if (d3.select("#weekday").property("checked") == true) {
 
+        var count;
+        var res = []
+
+        for (j = 0; j < intervals_keys.length; j++) {
+
+            count = 0;
+            this.data.forEach(function(d) {
+                for (i = 0; i < stations.length; i++) {
+                    if (d.time == intervals_keys[j]) {
+
+                        d.stationdata.forEach(function(k) {
+                            if (filter(k.station)) {
+                                count += k.weekday.arrivals
+                            }
+
+                        })
+
+                    }
+
+                }
+            })
+
+
+
+            var data = {
+                "time": intervals_keys[j],
+                "count": count
+            }
+
+            res.push(data)
+
+
+
+        }
+
+    }
+
+    if (d3.select("#weekend").property("checked") == true) {
+
+        var count;
+        var res = []
+
+        for (j = 0; j < intervals_keys.length; j++) {
+
+            count = 0;
+            this.data.forEach(function(d) {
+                for (i = 0; i < stations.length; i++) {
+                    if (d.time == intervals_keys[j]) {
+                        d.stationdata.forEach(function(k) {
+                            if (filter(k.station)) {
+                                count += k.weekend.arrivals
+                            }
+
+                        })
+                    }
+
+                }
+            })
+
+
+
+            var data = {
+                "time": intervals_keys[j],
+                "count": count
+            }
+
+            res.push(data)
+
+
+        }
+
+    }
+    if ((d3.select("#weekend").property("checked") == true && d3.select("#weekday").property("checked") == true) ||
+        (d3.select("#weekend").property("checked") == false && d3.select("#weekday").property("checked") == false)) {
+        var count;
+        var res = []
+
+        for (j = 0; j < intervals_keys.length; j++) {
+
+            count = 0;
+            this.data.forEach(function(d) {
+                for (i = 0; i < stations.length; i++) {
+                    if (d.time == intervals_keys[j]) {
+
+                        d.stationdata.forEach(function(k) {
+                            if (filter(k.station)) {
+                                count += k.weekend.arrivals
+                                count += k.weekday.arrivals
+                            }
+
+                        })
+                    }
+
+                }
+            })
+
+            var data = {
+                "time": intervals_keys[j],
+                "count": count
+            }
+
+            res.push(data)
+
+
+        }
+
+    }
+    return res;
+
+}

@@ -161,7 +161,7 @@ PieVis.prototype.updateVis = function() {
         .attr("class", function(d, i) {
             return "arc arc" + i
         })
-        .attr("transform", "translate(" + outerRadius + ", " + outerRadius + ")")
+        .attr("transform", "translate(" + outerRadius +  ", " + outerRadius + ")")
 
 
     var secondsvg = d3.select(".secondsvg").append("text")
@@ -169,6 +169,12 @@ PieVis.prototype.updateVis = function() {
         .attr("class", "text")
         .attr("transform", "translate(" + 80 + ", " + 275 + ")")
         .style("fill", "black")
+
+    // var secondsvg = d3.select(".secondsvg").append("text")
+    //     .text("Casual vs. Registered Breakdown")
+    //     .attr("class", "text")
+    //     .attr("transform", "translate(" + 80 + ", " + 10 + ")")
+    //     .style("fill", "black")
 
     arcs.append("path")
         .attr("d", arc)
@@ -194,7 +200,7 @@ PieVis.prototype.updateVis = function() {
         .attr('transform', function(d, i) {
             var height = legendrect + spacing;
             var offset = height;
-            var x = 17 * legendrect + 30;
+            var x = 15  * legendrect + 20;
             var y = i * height + offset;
             return 'translate(' + x + ',' + y + ')';
         })

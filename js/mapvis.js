@@ -19,6 +19,9 @@
 var empty = true;
 var margin = 75
 
+var circle = d3.selectAll(".circles")
+
+
 
 MapVis = function(_whole, _parentElement, _data, _tripdata, _capacitydata, _eventHandler) {
     circle_padding = 10
@@ -44,12 +47,13 @@ MapVis = function(_whole, _parentElement, _data, _tripdata, _capacitydata, _even
        
 }
 
+  var stations = ["3","4","5","6","7","8","9","10"
+               ,"11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98"]
 
 /**
  * Method that sets up the SVG and the variables
  */
 MapVis.prototype.initVis = function() {
-
 
     var that = this;
 
@@ -58,6 +62,7 @@ MapVis.prototype.initVis = function() {
         center: new google.maps.LatLng(42.358431, -71.059773),
         mapTypeId: google.maps.MapTypeId.TERRAIN,
     });
+
 
 
 
@@ -74,12 +79,12 @@ MapVis.prototype.initVis = function() {
                 padding = 50;
 
             var marker = layer.selectAll("svg")
-                .data(that.data["objects"])
-                .each(transform) 
+                .data(that.displayData)
+                .each(transform1) 
                 .enter().append("svg:svg")
                   .attr("width", 1000)
                   .attr("height", 1000)
-                .each(transform)
+                .each(transform1)
                 .attr("class", "marker")
                  .attr("id", function(d) {
                     return "svg-" +d.id;
@@ -93,28 +98,21 @@ MapVis.prototype.initVis = function() {
                    .attr("id", function(d) {
                     return "station-" +d.id;
                 })
+                .attr("r", function (d) {
+                     if (d3.select("#totaldepartures").property("checked") == true) {
+                        return Math.sqrt(d.departures/5) +circle_padding
+                        
+                  }
+                if (d3.select("#capacity").property("checked") == true) {
 
-       that.displayData.forEach(function (k){
-
-        if (d3.select("#totaldepartures").property("checked") == true) {
-            console.log("helpme")
-
+                         return circle_padding + Math.pow(d.capacity, 2)/60
+                     }
+            })
 
 
-                  d3.select("#station-"+k.station).attr("r", function(d){
-                    return Math.sqrt(k.departures/5 +circle_padding)
-                  })
-              }
 
-if (d3.select("#capacity").property("checked") == true) {
-console.log("arrivals")
-               d3.select("#station-"+k.station).attr("r", function(d){
-                    return circle_padding + Math.pow(k.capacity, 2)/60
-                  })
 
-}
-
-})
+       
 
 
   that.displayData.forEach(function (k){
@@ -153,23 +151,23 @@ console.log("arrivals")
             
             if(k.percent_full <= .2){
               
-                return "FFFFFF circle"
+                return "FFFFFF circle circles"
             }
             else if(k.percent_full > .2 && k.percent_full<=.4){
                 
-                return "FFB5B5 circle"
+                return "FFB5B5 circle circles"
             }
             else if(k.percent_full > .4 && k.percent_full<=.6){
                 
-                return "FF5959 circle"
+                return "FF5959 circle circles"
             }
             else if(k.percent_full > .6 && k.percent_full<=.8){
               
-                return "CF3A3A circle"
+                return "CF3A3A circle circles"
             }
             else {
 
-                return "B80000 circle"
+                return "B80000 circle circles"
             }
             
           })
@@ -184,12 +182,15 @@ console.log("arrivals")
                 .attr("y", padding)
                 .attr("dy", ".31em")
                 .attr("onclick", "alert('click')")
+                .attr("class", "circles")
                 .text(function(d) {
                     return (d.name);
-                });
+                })
+                 .attr("dx", 9)
 
 
-            function transform(d) {
+
+            function transform1(d) {
                 d = new google.maps.LatLng(d.point.coordinates[1], d.point.coordinates[0]);
                 d = projection.fromLatLngToDivPixel(d);
                 return d3.select(this)
@@ -206,9 +207,10 @@ console.log("arrivals")
     this.wrangleData(null);
 
     this.updateVis();
+    this.onLayoutChanged()
 }
 
-MapVis.prototype.moveMap = function(d){
+MapVis.prototype.moveMap = function(d, _zoom_set, _longitude, _lat){
     var that = this;
      
 
@@ -223,6 +225,12 @@ MapVis.prototype.moveMap = function(d){
             longitude=-71.059773
             lat=42.358431
             zoom_set = 15;
+        }
+        if (_zoom_set)
+        {
+            longitude = _longitude
+            lat = _lat
+            zoom_set = _zoom_set
         }
       }
 
@@ -244,12 +252,12 @@ MapVis.prototype.moveMap = function(d){
                 padding = 50;
 
             var marker = layer.selectAll("svg")
-                .data(that.data["objects"])
-                .each(transform) // update existing markers
+                .data(that.displayData)
+                .each(transform1) // update existing markers
                 .enter().append("svg:svg")
                   .attr("width", 1000)
                   .attr("height", 1000)
-                .each(transform)
+                .each(transform1)
                 .attr("class", "marker")
                  .attr("id", function(d) {
                     return "svg-" +d.id;
@@ -268,22 +276,29 @@ MapVis.prototype.moveMap = function(d){
        that.displayData.forEach(function (k){
 
         if (d3.select("#totaldepartures").property("checked") == true) {
-            console.log("helpme")
+            
 
 
 
                   d3.select("#station-"+k.station).attr("r", function(d){
-                    return Math.sqrt(k.departures/5 +circle_padding)
+                      return Math.sqrt(k.departures/5 )+circle_padding
+                  })
+                  .attr("rank", function(d){
+                    return Math.sqrt(k.departures/5 )+circle_padding
                   })
               }
+              
 
 if (d3.select("#capacity").property("checked") == true) {
-console.log("arrivals")
                d3.select("#station-"+k.station).attr("r", function(d){
                     return circle_padding + Math.pow(k.capacity, 2)/60
                   })
+               .attr("rank", function(d){
+                    return Math.sqrt(k.departures/5 )+circle_padding
+                  })
+              }
 
-}
+
 
 })
 
@@ -322,23 +337,23 @@ console.log("arrivals")
             
             if(k.percent_full <= .2){
               
-                return "FFFFFF circle"
+                return "FFFFFF circle circles"
             }
             else if(k.percent_full > .2 && k.percent_full<=.4){
                 
-                return "FFB5B5 circle"
+                return "FFB5B5 circle circles"
             }
             else if(k.percent_full > .4 && k.percent_full<=.6){
                 
-                return "FF5959 circle"
+                return "FF5959 circle circles"
             }
             else if(k.percent_full > .6 && k.percent_full<=.8){
               
-                return "CF3A3A circle"
+                return "CF3A3A circle circles"
             }
             else {
 
-                return "B80000 circle"
+                return "B80000 circle circles"
             }
             
           })
@@ -350,14 +365,16 @@ console.log("arrivals")
             marker.append("svg:text")
                 .attr("x", padding + 7)
                 .attr("y", padding)
+                .attr("class", "circles")
                 .attr("dy", ".31em")
                 .attr("onclick", "alert('click')")
                 .text(function(d) {
                     return (d.name + "test");
-                });
+                })
+                  .attr("dx", 9)
 
 
-            function transform(d) {
+            function transform1(d) {
                 d = new google.maps.LatLng(d.point.coordinates[1], d.point.coordinates[0]);
                 d = projection.fromLatLngToDivPixel(d);
                 return d3.select(this)
@@ -381,58 +398,66 @@ console.log("arrivals")
 
 MapVis.prototype.onRadioChanged = function () {
     var that = this
-console.log("he")
-
-
- // that.displayData.forEach(function (k){
- //    console.log("HHH")
- //             if (d3.select("#totaldepartures").property("checked") == true) {
-
- //                  d3.select("#station-"+k.station).attr("r", function(d){
- //                    return Math.sqrt(k.departures/5 +circle_padding)
- //                  })
- //              }
-
- //               d3.select("#station-"+k.station).attr("r", function(d){
- //                    return Math.sqrt(k.arrivals/5 +circle_padding)
- //                  })
 
 
 
+ that.displayData.forEach(function (k){
+    
+             if (d3.select("#totaldepartures").property("checked") == true) {
 
- //        })
+                  d3.select("#station-"+k.station).attr("r", function(d){
+                    return Math.sqrt(k.departures/5 ) +circle_padding
+                  })
+              }
+
+               d3.select("#station-"+k.station).attr("r", function(d){
+                    return Math.sqrt(k.arrivals/5)  +circle_padding
+                  })
+
+
+
+
+        })
 this.updateVis()
 
 }
 
 MapVis.prototype.updateVis = function() {
+    var that = this
 
-        var that = this;
 
-        that.displayData.forEach(function (k){
+
+d3.selectAll(".marker").data(that.displayData)
+
+   that.displayData.forEach(function (k){
 
         if (d3.select("#totaldepartures").property("checked") == true) {
-            console.log("helpme")
+           
 
 
 
                   d3.select("#station-"+k.station).attr("r", function(d){
-                    return Math.sqrt(k.departures/5 +circle_padding)
+                   
+                    return Math.sqrt(k.departures/5 )+circle_padding
+                  })
+                  .attr("rank", function(d){
+                    return Math.sqrt(k.departures/5 )+circle_padding
                   })
               }
+              
 
 if (d3.select("#capacity").property("checked") == true) {
-// console.log("arrivals")
+
                d3.select("#station-"+k.station).attr("r", function(d){
                     return circle_padding + Math.pow(k.capacity, 2)/60
                   })
-
+            
 
 
 }
 
-})
         
+        })
 
 
         that.displayData.forEach(function (k){
@@ -473,23 +498,23 @@ if (d3.select("#capacity").property("checked") == true) {
             
             if(k.percent_full <= .2){
               
-                return "FFFFFF circle"
+                return "FFFFFF circle circles"
             }
             else if(k.percent_full > .2 && k.percent_full<=.4){
                 
-                return "FFB5B5 circle"
+                return "FFB5B5 circle circles"
             }
             else if(k.percent_full > .4 && k.percent_full<=.6){
                 
-                return "FF5959 circle"
+                return "FF5959 circle circles"
             }
             else if(k.percent_full > .6 && k.percent_full<=.8){
               
-                return "CF3A3A circle"
+                return "CF3A3A circle circles"
             }
             else {
 
-                return "B80000 circle"
+                return "B80000 circle circles"
             }
             
           })
@@ -542,7 +567,9 @@ MapVis.prototype.onCheckboxChanged = function(_filterFunction) {
     
 
     var that = this
- that.displaydata = []
+ that.displayData = []
+
+
    
                 var filt = function(d) {
                     if (that.timeStart == null || that.timeEnd == null)
@@ -561,10 +588,23 @@ MapVis.prototype.onCheckboxChanged = function(_filterFunction) {
 
         return d == selected_station
     }
-            
              this.wrangleData(filt, station_filter)
 
+
+ if (d3.select("#linearposition").property("checked") == true) {
+
+                    // d3.selectAll(".marker").data(that.displayData)
+                            
+                            map_vis.moveMap(null, 15, -71.059773, 42.358431)
+
+                                this.onLayoutChanged() 
+                        }
+
             this.updateVis();
+
+
+
+
 
 
 }
@@ -602,7 +642,7 @@ this.wrangleData(f, station_filter)
 
 
 MapVis.prototype.capacity = function(k) {
-    console.log(k)
+   
     
      var that =this
     var station;
@@ -614,42 +654,20 @@ MapVis.prototype.capacity = function(k) {
                 station = newData["objects"][i]["id"]
             }
 }
-console.log(station)
-//    
-   
-//    var filt = function(d) {
-//                     if (that.timeStart == null || that.timeEnd == null)
-//                     {
-//                         that.timeStart = 0
-//                         that.timeEnd = 24
-//                     }
-//         return d >= Math.round(that.timeStart) && d <= Math.round(that.timeEnd)
-//     }
-//     var station_filter = function(d) {
 
-//         return d == selected_station
-//     }
-
-// this.wrangleData(filt, station_filter)
-//     this.updateVis();
-//     var departures;
     this.displayData.forEach(function (d) {
 
 
         if (station == d.station)
         {
-            console.log(d)
             capacity = d.capacity
         }
-        // if (d )
 
 
     })
 
-    console.log(capacity)
-
-  d3.select("#departures").text(capacity);// 
-    // console.log(departures)
+  d3.select("#departures").text(capacity); 
+ 
 
      
 
@@ -730,11 +748,25 @@ MapVis.prototype.filterAndAggregate = function(_filter) {
             station = k
             percent_full = (arrivals - departures) / capacity
 
+         that.data["objects"].forEach(function (d) {
+                if ( k == d.id)
+                {
+                    name = d.name
+                    point = d.point
+                }
+
+
+            })
+
             var tripSummary = {
                 "station": station,
                 "departures": departures,
                 "arrivals": arrivals,
-                "percent_full": percent_full
+                "percent_full": percent_full,
+                "capacity": capacity,
+                "id": station,
+                "name": name,
+                "point": point
             };
 
             res.push(tripSummary)
@@ -796,11 +828,25 @@ MapVis.prototype.filterAndAggregate = function(_filter) {
             station = k
             percent_full = (arrivals - departures) / capacity
 
+        that.data["objects"].forEach(function (d) {
+                if ( k == d.id)
+                {
+                    name = d.name
+                    point = d.point
+                }
+
+
+            })
+
             var tripSummary = {
                 "station": station,
                 "departures": departures,
                 "arrivals": arrivals,
-                "percent_full": percent_full
+                "percent_full": percent_full,
+                "capacity": capacity,
+                "id": station,
+                "name": name,
+                "point": point
             };
 
             res.push(tripSummary)
@@ -819,6 +865,8 @@ MapVis.prototype.filterAndAggregate = function(_filter) {
         var station;
         var capacity;
         var res = []
+        var name;
+        var point;
 
 
         stations.forEach(function(k) {
@@ -868,12 +916,25 @@ MapVis.prototype.filterAndAggregate = function(_filter) {
             station = k
             percent_full = (arrivals - departures) / capacity
 
+            that.data["objects"].forEach(function (d) {
+                if ( k == d.id)
+                { 
+                    name = d.name
+                    point = d.point
+                }
+
+
+            })
+
             var tripSummary = {
                 "station": station,
                 "departures": departures,
                 "arrivals": arrivals,
                 "percent_full": percent_full,
-                "capacity": capacity
+                "capacity": capacity,
+                "id": station,
+                "name": name,
+                "point": point
             };
 
             res.push(tripSummary)
@@ -884,8 +945,94 @@ MapVis.prototype.filterAndAggregate = function(_filter) {
 
 
     }
-     console.log(res)
     this.displayData = res
     return res
    
+}
+
+var force = d3.layout.force()
+    .size([1000/1.2, 1000/1.2])
+    .charge(-100)
+    .linkDistance(10)
+    .alpha(1)
+    .on("tick", this.tick);
+
+
+MapVis.prototype.tick = function (d) {
+  this.graph_update(0);
+}
+
+var circles;
+
+MapVis.prototype.onLayoutChanged = function (d) {
+ 
+
+
+ function transform2(d) {
+
+
+        return "translate("+d.x+","+d.y+")"; 
+      
+
+            
+        ;
+    };
+
+    d3.selectAll(".marker").each(transform2)
+
+    var that = this
+
+     var y_scale = d3.scale.ordinal()
+        .rangeBands([450, 10])
+        .domain(d3.range(stations.length))
+
+    if (d3.select("#totaldepartures").property("checked") == true) {
+           that.displayData.sort(function sort (a,b){
+     
+      return b.departures < a.departures ? -1
+          :  b.departures> a.departures?1
+          : 0
+
+    })
+    }
+
+    if (d3.select("#capacity").property("checked") == true) {
+       
+
+    that.displayData.sort(function sort (a,b){
+     
+      return b.capacity < a.capacity ? -1
+          :  b.capacity> a.capacity?1
+          : 0
+
+    })
+    }
+
+
+    that.displayData.map(function (d,i) {
+      d.x = 100
+
+            d.y = i * 10 
+    })
+
+ 
+
+
+      that.graph_update(1000)
+   }
+
+   
+
+
+MapVis.prototype.graph_update = function (duration) {
+  
+
+  var that = this;
+
+  circles = d3.selectAll(".circles")
+  circles.transition().duration(duration)
+      .attr("transform", function(d) { 
+        return "translate("+d.x+","+d.y+")"; 
+      })
+    .attr("r", 15)
 }

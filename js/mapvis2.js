@@ -19,6 +19,9 @@
 var empty = true;
 var margin = 75
 
+var circle = d3.selectAll(".circles")
+
+
 
 MapVis = function(_whole, _parentElement, _data, _tripdata, _capacitydata, _eventHandler) {
     circle_padding = 10
@@ -44,61 +47,14 @@ MapVis = function(_whole, _parentElement, _data, _tripdata, _capacitydata, _even
        
 }
 
+  var stations = ["3","4","5","6","7","8","9","10"
+               ,"11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98"]
 
-
-MapVis.prototype.onLayoutChanged = function () {
-    console.log(d)
-
-
-     force.stop()
-
-     svg.attr("height", 1500);
-
-     var y_scale = d3.scale.ordinal()
-        .rangeBands([height - 450, 10])
-        .domain(d3.range(original_data.length))
-
-    graph.nodes.sort(function sort (a,b){
-      return b[rankvalue] < a[rankvalue] ? -1
-          :  b[rankvalue] > a[rankvalue] ?1
-          : 0
-
-    })
-
-    graph.nodes.map(function (d,i) {
-      d.x = 15
-      d.y= i*12 + 50
-   
-    })
-
-
-      this.graph_update(1000)
-   }
-
-   f
-
-
-
-})
-
-
-MapVis.prototype.graph_update = function (duration) {
-  link.transition().duration(duration)
-      .attr("x1", function(d) { return d.target.x; })
-      .attr("y1", function(d) { return d.target.y; })
-      .attr("x2", function(d) { return d.source.x; })
-      .attr("y2", function(d) { return d.source.y; });
-
-  node.transition().duration(duration)
-      .attr("transform", function(d) { 
-        return "translate("+d.x+","+d.y+")"; 
-      });
-}
 /**
  * Method that sets up the SVG and the variables
  */
 MapVis.prototype.initVis = function() {
-
+    console.log(this.displayData)
 
     var that = this;
 
@@ -107,6 +63,7 @@ MapVis.prototype.initVis = function() {
         center: new google.maps.LatLng(42.358431, -71.059773),
         mapTypeId: google.maps.MapTypeId.TERRAIN,
     });
+
 
 
 
@@ -123,12 +80,12 @@ MapVis.prototype.initVis = function() {
                 padding = 50;
 
             var marker = layer.selectAll("svg")
-                .data(that.data["objects"])
-                .each(transform) 
+                .data(that.displayData)
+                .each(transform1) 
                 .enter().append("svg:svg")
                   .attr("width", 1000)
                   .attr("height", 1000)
-                .each(transform)
+                .each(transform1)
                 .attr("class", "marker")
                  .attr("id", function(d) {
                     return "svg-" +d.id;
@@ -142,28 +99,22 @@ MapVis.prototype.initVis = function() {
                    .attr("id", function(d) {
                     return "station-" +d.id;
                 })
+                .attr("r", function (d) {
+                    console.log(d)
+                     if (d3.select("#totaldepartures").property("checked") == true) {
+                        return Math.sqrt(d.departures/5 +circle_padding)
+                        
+                  }
+                if (d3.select("#capacity").property("checked") == true) {
 
-       that.displayData.forEach(function (k){
-
-        if (d3.select("#totaldepartures").property("checked") == true) {
-            console.log("helpme")
-
+                         return circle_padding + Math.pow(d.capacity, 2)/60
+                     }
+            })
 
 
-                  d3.select("#station-"+k.station).attr("r", function(d){
-                    return Math.sqrt(k.departures/5 +circle_padding)
-                  })
-              }
 
-if (d3.select("#capacity").property("checked") == true) {
-console.log("arrivals")
-               d3.select("#station-"+k.station).attr("r", function(d){
-                    return circle_padding + Math.pow(k.capacity, 2)/60
-                  })
 
-}
-
-})
+       
 
 
   that.displayData.forEach(function (k){
@@ -202,23 +153,23 @@ console.log("arrivals")
             
             if(k.percent_full <= .2){
               
-                return "FFFFFF circle"
+                return "FFFFFF circle circles"
             }
             else if(k.percent_full > .2 && k.percent_full<=.4){
                 
-                return "FFB5B5 circle"
+                return "FFB5B5 circle circles"
             }
             else if(k.percent_full > .4 && k.percent_full<=.6){
                 
-                return "FF5959 circle"
+                return "FF5959 circle circles"
             }
             else if(k.percent_full > .6 && k.percent_full<=.8){
               
-                return "CF3A3A circle"
+                return "CF3A3A circle circles"
             }
             else {
 
-                return "B80000 circle"
+                return "B80000 circle circles"
             }
             
           })
@@ -233,12 +184,13 @@ console.log("arrivals")
                 .attr("y", padding)
                 .attr("dy", ".31em")
                 .attr("onclick", "alert('click')")
+                .attr("class", "circles")
                 .text(function(d) {
                     return (d.name);
                 });
 
 
-            function transform(d) {
+            function transform1(d) {
                 d = new google.maps.LatLng(d.point.coordinates[1], d.point.coordinates[0]);
                 d = projection.fromLatLngToDivPixel(d);
                 return d3.select(this)
@@ -255,9 +207,10 @@ console.log("arrivals")
     this.wrangleData(null);
 
     this.updateVis();
+    this.onLayoutChanged()
 }
 
-MapVis.prototype.moveMap = function(d){
+MapVis.prototype.moveMap = function(d, _zoom_set, _longitude, _lat){
     var that = this;
      
 
@@ -272,6 +225,12 @@ MapVis.prototype.moveMap = function(d){
             longitude=-71.059773
             lat=42.358431
             zoom_set = 15;
+        }
+        if (_zoom_set)
+        {
+            longitude = _longitude
+            lat = _lat
+            zoom_set = _zoom_set
         }
       }
 
@@ -293,12 +252,12 @@ MapVis.prototype.moveMap = function(d){
                 padding = 50;
 
             var marker = layer.selectAll("svg")
-                .data(that.data["objects"])
-                .each(transform) // update existing markers
+                .data(that.displayData)
+                .each(transform1) // update existing markers
                 .enter().append("svg:svg")
                   .attr("width", 1000)
                   .attr("height", 1000)
-                .each(transform)
+                .each(transform1)
                 .attr("class", "marker")
                  .attr("id", function(d) {
                     return "svg-" +d.id;
@@ -322,17 +281,26 @@ MapVis.prototype.moveMap = function(d){
 
 
                   d3.select("#station-"+k.station).attr("r", function(d){
+                    console.log("asd;lfkj")
+                    return Math.sqrt(k.departures/5 +circle_padding)
+                  })
+                  .attr("rank", function(d){
                     return Math.sqrt(k.departures/5 +circle_padding)
                   })
               }
+              
 
 if (d3.select("#capacity").property("checked") == true) {
 console.log("arrivals")
                d3.select("#station-"+k.station).attr("r", function(d){
                     return circle_padding + Math.pow(k.capacity, 2)/60
                   })
+               .attr("rank", function(d){
+                    return Math.sqrt(k.departures/5 +circle_padding)
+                  })
+              }
 
-}
+
 
 })
 
@@ -371,23 +339,23 @@ console.log("arrivals")
             
             if(k.percent_full <= .2){
               
-                return "FFFFFF circle"
+                return "FFFFFF circle circles"
             }
             else if(k.percent_full > .2 && k.percent_full<=.4){
                 
-                return "FFB5B5 circle"
+                return "FFB5B5 circle circles"
             }
             else if(k.percent_full > .4 && k.percent_full<=.6){
                 
-                return "FF5959 circle"
+                return "FF5959 circle circles"
             }
             else if(k.percent_full > .6 && k.percent_full<=.8){
               
-                return "CF3A3A circle"
+                return "CF3A3A circle circles"
             }
             else {
 
-                return "B80000 circle"
+                return "B80000 circle circles"
             }
             
           })
@@ -399,6 +367,7 @@ console.log("arrivals")
             marker.append("svg:text")
                 .attr("x", padding + 7)
                 .attr("y", padding)
+                .attr("class", "circles")
                 .attr("dy", ".31em")
                 .attr("onclick", "alert('click')")
                 .text(function(d) {
@@ -406,7 +375,7 @@ console.log("arrivals")
                 });
 
 
-            function transform(d) {
+            function transform1(d) {
                 d = new google.maps.LatLng(d.point.coordinates[1], d.point.coordinates[0]);
                 d = projection.fromLatLngToDivPixel(d);
                 return d3.select(this)
@@ -430,35 +399,78 @@ console.log("arrivals")
 
 MapVis.prototype.onRadioChanged = function () {
     var that = this
-console.log("he")
+// console.log("he")
+// if 
 
 
- // that.displayData.forEach(function (k){
- //    console.log("HHH")
- //             if (d3.select("#totaldepartures").property("checked") == true) {
+ that.displayData.forEach(function (k){
+    console.log("HHH")
+             if (d3.select("#totaldepartures").property("checked") == true) {
 
- //                  d3.select("#station-"+k.station).attr("r", function(d){
- //                    return Math.sqrt(k.departures/5 +circle_padding)
- //                  })
- //              }
+                  d3.select("#station-"+k.station).attr("r", function(d){
+                    return Math.sqrt(k.departures/5 +circle_padding)
+                  })
+              }
 
- //               d3.select("#station-"+k.station).attr("r", function(d){
- //                    return Math.sqrt(k.arrivals/5 +circle_padding)
- //                  })
-
-
+               d3.select("#station-"+k.station).attr("r", function(d){
+                    return Math.sqrt(k.arrivals/5 +circle_padding)
+                  })
 
 
- //        })
+
+
+        })
 this.updateVis()
 
 }
 
 MapVis.prototype.updateVis = function() {
+    var that = this
 
-        var that = this;
 
-        that.displayData.forEach(function (k){
+
+d3.selectAll(".marker").data(that.displayData)
+
+    // this.updateVis();
+
+//  if (d3.select("#linearposition").property("checked") == false) {
+       
+
+//         that.displayData.forEach(function (k){
+
+       
+
+//         if (d3.select("#totaldepartures").property("checked") == true) {
+//             console.log("helpme")
+
+
+//  console.log("herehere")
+//                   d3.select("#station-"+k.station).attr("r", function(d){
+//                     return Math.sqrt(k.departures/5 +circle_padding)
+//                   })
+//                   .attr("rank", function(d){
+//                     return Math.sqrt(k.departures/5 +circle_padding)
+//                   })
+              
+//               }
+
+// if (d3.select("#capacity").property("checked") == false) {
+// // console.log("arrivals")
+//                d3.select("#station-"+k.station).attr("r", function(d){
+//                     return circle_padding + Math.pow(k.capacity, 2)/60
+//                   })
+//                .attr("rank", function(d){
+//                     return Math.sqrt(k.departures/5 +circle_padding)
+//                   })
+              
+
+
+
+// }
+
+// })
+
+   that.displayData.forEach(function (k){
 
         if (d3.select("#totaldepartures").property("checked") == true) {
             console.log("helpme")
@@ -466,22 +478,27 @@ MapVis.prototype.updateVis = function() {
 
 
                   d3.select("#station-"+k.station).attr("r", function(d){
+                    console.log("asd;lfkj")
+                    return Math.sqrt(k.departures/5 +circle_padding)
+                  })
+                  .attr("rank", function(d){
                     return Math.sqrt(k.departures/5 +circle_padding)
                   })
               }
+              
 
 if (d3.select("#capacity").property("checked") == true) {
-// console.log("arrivals")
+console.log("arrivals")
                d3.select("#station-"+k.station).attr("r", function(d){
                     return circle_padding + Math.pow(k.capacity, 2)/60
                   })
-
+            
 
 
 }
 
-})
         
+        })
 
 
         that.displayData.forEach(function (k){
@@ -522,23 +539,23 @@ if (d3.select("#capacity").property("checked") == true) {
             
             if(k.percent_full <= .2){
               
-                return "FFFFFF circle"
+                return "FFFFFF circle circles"
             }
             else if(k.percent_full > .2 && k.percent_full<=.4){
                 
-                return "FFB5B5 circle"
+                return "FFB5B5 circle circles"
             }
             else if(k.percent_full > .4 && k.percent_full<=.6){
                 
-                return "FF5959 circle"
+                return "FF5959 circle circles"
             }
             else if(k.percent_full > .6 && k.percent_full<=.8){
               
-                return "CF3A3A circle"
+                return "CF3A3A circle circles"
             }
             else {
 
-                return "B80000 circle"
+                return "B80000 circle circles"
             }
             
           })
@@ -591,7 +608,9 @@ MapVis.prototype.onCheckboxChanged = function(_filterFunction) {
     
 
     var that = this
- that.displaydata = []
+ that.displayData = []
+
+
    
                 var filt = function(d) {
                     if (that.timeStart == null || that.timeEnd == null)
@@ -610,10 +629,25 @@ MapVis.prototype.onCheckboxChanged = function(_filterFunction) {
 
         return d == selected_station
     }
-            
+            console.log("old", that.displayData)
              this.wrangleData(filt, station_filter)
 
+
+ if (d3.select("#linearposition").property("checked") == true) {
+
+                    // d3.selectAll(".marker").data(that.displayData)
+                            
+                            map_vis.moveMap(null, 15, -71.059773, 42.358431)
+
+                                this.onLayoutChanged() 
+                        }
+
             this.updateVis();
+
+            console.log("new", that.displayData)
+
+
+
 
 
 }
@@ -779,11 +813,26 @@ MapVis.prototype.filterAndAggregate = function(_filter) {
             station = k
             percent_full = (arrivals - departures) / capacity
 
+         that.data["objects"].forEach(function (d) {
+                if ( k == d.id)
+                {
+                    console.log(d)
+                    name = d.name
+                    point = d.point
+                }
+
+
+            })
+
             var tripSummary = {
                 "station": station,
                 "departures": departures,
                 "arrivals": arrivals,
-                "percent_full": percent_full
+                "percent_full": percent_full,
+                "capacity": capacity,
+                "id": station,
+                "name": name,
+                "point": point
             };
 
             res.push(tripSummary)
@@ -845,11 +894,25 @@ MapVis.prototype.filterAndAggregate = function(_filter) {
             station = k
             percent_full = (arrivals - departures) / capacity
 
+        that.data["objects"].forEach(function (d) {
+                if ( k == d.id)
+                {
+                    name = d.name
+                    point = d.point
+                }
+
+
+            })
+
             var tripSummary = {
                 "station": station,
                 "departures": departures,
                 "arrivals": arrivals,
-                "percent_full": percent_full
+                "percent_full": percent_full,
+                "capacity": capacity,
+                "id": station,
+                "name": name,
+                "point": point
             };
 
             res.push(tripSummary)
@@ -868,6 +931,8 @@ MapVis.prototype.filterAndAggregate = function(_filter) {
         var station;
         var capacity;
         var res = []
+        var name;
+        var point;
 
 
         stations.forEach(function(k) {
@@ -917,12 +982,27 @@ MapVis.prototype.filterAndAggregate = function(_filter) {
             station = k
             percent_full = (arrivals - departures) / capacity
 
+            that.data["objects"].forEach(function (d) {
+                if ( k == d.id)
+                {
+                    // console.log(d)
+                    // id  
+                    name = d.name
+                    point = d.point
+                }
+
+
+            })
+
             var tripSummary = {
                 "station": station,
                 "departures": departures,
                 "arrivals": arrivals,
                 "percent_full": percent_full,
-                "capacity": capacity
+                "capacity": capacity,
+                "id": station,
+                "name": name,
+                "point": point
             };
 
             res.push(tripSummary)
@@ -938,3 +1018,5 @@ MapVis.prototype.filterAndAggregate = function(_filter) {
     return res
    
 }
+
+
