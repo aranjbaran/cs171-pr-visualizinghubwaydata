@@ -5,4 +5,4 @@ This github repository contains code on two branches for visualizing Hubway data
 
 The project website is here: http://aranjbaran.github.io/cs171-pr-visualizinghubwaydata/index.html
 
-The walkthrough video is here: 
+The walkthrough video is here: https://www.youtube.com/watch?v=EiT9ldC9UBA
