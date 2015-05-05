@@ -263,7 +263,7 @@ UserVis.prototype.updateVis = function() {
         .attr('transform', function(d, i) {
             var height = legendRectSize + legendSpacing ;
             var offset = height;
-            var horz = 10+ legendRectSize;
+            var horz = 10+ legendRectSize + 450;
             var vert = i * height + offset - 10;
             return 'translate(' + horz + ',' + vert + ')';
         })

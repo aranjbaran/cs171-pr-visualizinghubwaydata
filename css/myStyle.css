@@ -81,7 +81,7 @@ html,
 
 
         #station {
-            width: 600px;
+            width: 900px;
             height: 40px;
             position: absolute;
             top: 160px;
@@ -105,7 +105,7 @@ html,
             width: 500px;
             height: 40px;
             position: absolute;
-            top: 35px;
+            top: 20px;
             left: 1220px;
             padding: 0;
             z-index: 60;
