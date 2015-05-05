@@ -6,3 +6,5 @@ This github repository contains code on two branches for visualizing Hubway data
 The project website is here: http://aranjbaran.github.io/cs171-pr-visualizinghubwaydata/index.html
 
 The walkthrough video is here: https://www.youtube.com/watch?v=EiT9ldC9UBA
+ 
+ The large data files are here on this Dropbox: https://www.dropbox.com/sh/d29v5fn0iwwsvwa/AABvNGQ4HCgAPHGO0i--ZHOOa?dl=0
