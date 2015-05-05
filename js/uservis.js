@@ -185,7 +185,7 @@ UserVis.prototype.updateVis = function() {
     hover_enter.append("rect")
     
 
-
+    // create hover element
     hover
         .attr("id", function(d, i) {
             return classes[i]
@@ -444,9 +444,9 @@ UserVis.prototype.filterAndAggregate = function(_filter, _stationfilter) {
             station_filter = _stationfilter;
         }
 
+ 
 
-
-
+//sort data into appropriate age and gender groups
 if (d3.select("#weekday").property("checked") == true) {
         
         var male16_35 = 0;

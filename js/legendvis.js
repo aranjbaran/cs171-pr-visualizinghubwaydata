@@ -30,6 +30,8 @@ LegendVis.prototype.initVis = function() {
     var spacing = 6.5;
     var maplegendrect = 17;
 
+    //create legend for map
+
 var color = ["#FFFFFF", "#FFB5B5", "#FF5959", "#CF3A3A", "#B80000"]
 
 var ids = ["FFFFFF", "FFB5B5", "FF5959", "CF3A3A", "B80000"]
@@ -86,6 +88,7 @@ var maplegend = this.svg.selectAll('.maplegend')
                 })
         })
 
+    //add hover feature
     maplegend.append('rect')
         .attr('width', maplegendrect)
         .attr('height', maplegendrect)

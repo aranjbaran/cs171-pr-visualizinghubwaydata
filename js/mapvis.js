@@ -66,7 +66,7 @@ MapVis.prototype.initVis = function() {
 
 
 
-
+    // build map
     var overlay = new google.maps.OverlayView();
 
     overlay.onAdd = function() {
@@ -114,7 +114,7 @@ MapVis.prototype.initVis = function() {
 
        
 
-
+//fill based on percent full
   that.displayData.forEach(function (k){
 
           d3.select("#station-"+k.station).attr("fill", function(d){
@@ -144,7 +144,7 @@ MapVis.prototype.initVis = function() {
 
         })
 
-
+  //hover feature
  that.displayData.forEach(function (k){
 
           d3.select("#station-"+k.station).attr("class", function(d){
@@ -207,9 +207,10 @@ MapVis.prototype.initVis = function() {
     this.wrangleData(null);
 
     this.updateVis();
-    this.onLayoutChanged()
+    
 }
 
+//reset map on station select
 MapVis.prototype.moveMap = function(d, _zoom_set, _longitude, _lat){
     var that = this;
      
@@ -400,24 +401,7 @@ MapVis.prototype.onRadioChanged = function () {
     var that = this
 
 
-
- that.displayData.forEach(function (k){
-    
-             if (d3.select("#totaldepartures").property("checked") == true) {
-
-                  d3.select("#station-"+k.station).attr("r", function(d){
-                    return Math.sqrt(k.departures/5 ) +circle_padding
-                  })
-              }
-
-               d3.select("#station-"+k.station).attr("r", function(d){
-                    return Math.sqrt(k.arrivals/5)  +circle_padding
-                  })
-
-
-
-
-        })
+// change sizing
 this.updateVis()
 
 }
@@ -440,9 +424,7 @@ d3.selectAll(".marker").data(that.displayData)
                    
                     return Math.sqrt(k.departures/5 )+circle_padding
                   })
-                  .attr("rank", function(d){
-                    return Math.sqrt(k.departures/5 )+circle_padding
-                  })
+                 
               }
               
 
@@ -530,19 +512,7 @@ if (d3.select("#capacity").property("checked") == true) {
      * Method to wrangle the data. In this case it takes an options object
      */
 
-MapVis.prototype.givedepartures = function (d)
-{
 
-    that.displayData.forEach(function (k){
-            if (k.id = d.id)
-            {
-
-                  alert(  "There were" + k.departures + "departures during this time.");
-            }
-
-   
-})
-}
 
 MapVis.prototype.wrangleData = function(_filterFunction) {
 
@@ -565,18 +535,18 @@ MapVis.prototype.onStationChanged = function(_filterFunction) {
 
 MapVis.prototype.onCheckboxChanged = function(_filterFunction) {
     
-
+    // filter with time and station
     var that = this
- that.displayData = []
+    that.displayData = []
 
 
    
-                var filt = function(d) {
-                    if (that.timeStart == null || that.timeEnd == null)
-                    {
-                        that.timeStart = 0
-                        that.timeEnd = 24
-                    }
+    var filt = function(d) {
+        if (that.timeStart == null || that.timeEnd == null)
+        {
+            that.timeStart = 0
+            that.timeEnd = 24
+        }
         return d >= Math.round(that.timeStart) && d <= Math.round(that.timeEnd)
     }
 
@@ -633,9 +603,10 @@ this.wrangleData(f, station_filter)
 }
 
 
-
+//update total capacity based on station
 MapVis.prototype.capacity = function(k) {
    
+
     
      var that =this
     var station;
@@ -943,89 +914,3 @@ MapVis.prototype.filterAndAggregate = function(_filter) {
    
 }
 
-var force = d3.layout.force()
-    .size([1000/1.2, 1000/1.2])
-    .charge(-100)
-    .linkDistance(10)
-    .alpha(1)
-    .on("tick", this.tick);
-
-
-MapVis.prototype.tick = function (d) {
-  this.graph_update(0);
-}
-
-var circles;
-
-MapVis.prototype.onLayoutChanged = function (d) {
- 
-
-
- function transform2(d) {
-
-
-        return "translate("+d.x+","+d.y+")"; 
-      
-
-            
-        ;
-    };
-
-    d3.selectAll(".marker").each(transform2)
-
-    var that = this
-
-     var y_scale = d3.scale.ordinal()
-        .rangeBands([450, 10])
-        .domain(d3.range(stations.length))
-
-    if (d3.select("#totaldepartures").property("checked") == true) {
-           that.displayData.sort(function sort (a,b){
-     
-      return b.departures < a.departures ? -1
-          :  b.departures> a.departures?1
-          : 0
-
-    })
-    }
-
-    if (d3.select("#capacity").property("checked") == true) {
-       
-
-    that.displayData.sort(function sort (a,b){
-     
-      return b.capacity < a.capacity ? -1
-          :  b.capacity> a.capacity?1
-          : 0
-
-    })
-    }
-
-
-    that.displayData.map(function (d,i) {
-      d.x = 100
-
-            d.y = i * 10 
-    })
-
- 
-
-
-      that.graph_update(1000)
-   }
-
-   
-
-
-MapVis.prototype.graph_update = function (duration) {
-  
-
-  var that = this;
-
-  circles = d3.selectAll(".circles")
-  circles.transition().duration(duration)
-      .attr("transform", function(d) { 
-        return "translate("+d.x+","+d.y+")"; 
-      })
-    .attr("r", 15)
-}

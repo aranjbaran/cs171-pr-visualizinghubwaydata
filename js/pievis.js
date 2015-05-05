@@ -170,11 +170,7 @@ PieVis.prototype.updateVis = function() {
         .attr("transform", "translate(" + 80 + ", " + 275 + ")")
         .style("fill", "black")
 
-    // var secondsvg = d3.select(".secondsvg").append("text")
-    //     .text("Casual vs. Registered Breakdown")
-    //     .attr("class", "text")
-    //     .attr("transform", "translate(" + 80 + ", " + 10 + ")")
-    //     .style("fill", "black")
+
 
     arcs.append("path")
         .attr("d", arc)
@@ -191,7 +187,7 @@ PieVis.prototype.updateVis = function() {
     var spacing = 4.5;
     var legendrect = 17;
    
-
+    // create legend
     var legend = svg.selectAll('.legend')
         .data(color)
         .enter()
@@ -283,7 +279,7 @@ PieVis.prototype.updateVis = function() {
 
 PieVis.prototype.onSelectionChange = function(selection) {
 
-    // TODO: call wrangle function
+    // filter by time
     var that =this
     if (!selection.min_time || !selection.max_time)
     {
@@ -352,6 +348,8 @@ female: 0,
 casual: 0,
 registered: 0};
 var user_final= [0, 0]
+
+//filter data based on selected buttons/brush
 
 if (d3.select("#weekday").property("checked") == true) {
 

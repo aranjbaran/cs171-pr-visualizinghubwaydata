@@ -95,22 +95,7 @@
         </div>
     
 
-       <!--   <div id="position">
-         <div id = "pos">
-            Position Markers:
-           <label >
-                <input type="radio" id="mapposition" name="position" value="departures" > On Top of Map</label>
-            <label>
-                <input type="radio" id="linearposition" name="position" value="capacity" > Linear Ranking </label>
-        </div>
-        </div> -->
-      <!--   <form >
-            Scale Station Labels By:
-            <label > 
-                <input type="radio" id="departures" name="scale" value="departures" id > Departures </label>
-            <label>
-                <input type="radio" id="arrivals" name="scale" value="arrivals" > Arrivals</label>
-        </form> -->
+      
 
     <form>
         <div id="stationdropdown">
@@ -255,9 +240,7 @@
                 });
 
 
-// $(MyEventHandler).bind("selectionChanged", function(event, range){
-//                     d3.select("#departures").text(convert_number(range['min_time'])+ " -> "+convert_number(range['max_time']));
-//                 });
+
 
 
                     d3.select("#weekday").on("change", function(d) {
@@ -371,7 +354,7 @@
             })
 
 
-
+            // convert time value of data
             var gettime = function(d) {
 
                 var value = d3.range(8).map(function() {
