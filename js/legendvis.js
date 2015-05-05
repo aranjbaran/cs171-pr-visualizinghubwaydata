@@ -11,7 +11,7 @@ LegendVis = function(_parentElement) {
             left: 100
         },
   
-    this.width = 200
+    this.width = 300
      
 
     this.height = 400 - this.margin.top - this.margin.bottom;
